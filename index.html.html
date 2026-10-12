@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بوابة المحاضرات والجدول الدراسي</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Cairo', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-16 selection:bg-indigo-500 selection:text-white">
+
+  <!-- ================= Header & Progress ================= -->
+  <header class="bg-gradient-to-r from-indigo-700 via-indigo-600 to-violet-700 text-white shadow-xl sticky top-0 z-40">
+    <div class="max-w-5xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur flex items-center justify-center text-xl shadow-inner border border-white/20">
+            📚
+          </div>
+          <div>
+            <h1 class="text-lg md:text-xl font-bold tracking-tight">منصة متابعة المحاضرات</h1>
+            <p class="text-xs text-indigo-200">تقدمك الدراسي محفوظ تلقائياً على جهازك</p>
+          </div>
+        </div>
+
+        <!-- أزرار التبديل بين العرضين -->
+        <div class="flex bg-indigo-900/60 p-1 rounded-xl border border-indigo-400/20 text-xs font-semibold">
+          <button id="tab-list-btn" onclick="switchView('list')" class="px-3 py-1.5 rounded-lg transition bg-white text-indigo-900 shadow">
+            📋 القائمة
+          </button>
+          <button id="tab-cal-btn" onclick="switchView('calendar')" class="px-3 py-1.5 rounded-lg transition text-indigo-200 hover:text-white">
+            📅 التقويم
+          </button>
+        </div>
+      </div>
+
+      <!-- إحصائيات ونسبة التقدم -->
+      <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/15">
+        <div class="flex items-center justify-between text-xs mb-1.5 font-medium">
+          <span id="progress-text">نسبة الإنجاز: 0%</span>
+          <span id="motivational-quote" class="text-indigo-200 hidden sm:inline">شد حيلك يا بطل! 🚀</span>
+        </div>
+        <!-- Progress Bar -->
+        <div class="w-full bg-black/20 rounded-full h-2.5 overflow-hidden p-0.5">
+          <div id="progress-bar-fill" class="bg-gradient-to-r from-amber-400 to-emerald-400 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+
+        <!-- عدادات سريعة -->
+        <div class="grid grid-cols-4 gap-2 mt-3 pt-2 border-t border-white/10 text-center text-xs">
+          <div>
+            <span class="text-indigo-200 block text-[10px]">المجموع</span>
+            <span id="stat-total" class="font-bold text-sm">0</span>
+          </div>
+          <div>
+            <span class="text-rose-200 block text-[10px]">ما قاريها</span>
+            <span id="stat-none" class="font-bold text-sm text-rose-300">0</span>
+          </div>
+          <div>
+            <span class="text-amber-200 block text-[10px]">قراءة أولى</span>
+            <span id="stat-once" class="font-bold text-sm text-amber-300">0</span>
+          </div>
+          <div>
+            <span class="text-emerald-200 block text-[10px]">مراجعة ثانية</span>
+            <span id="stat-twice" class="font-bold text-sm text-emerald-300">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= المحتوى الرئيسي ================= -->
+  <main class="max-w-5xl mx-auto px-4 mt-6">
+
+    <!-- شاشة التحميل -->
+    <div id="loading" class="text-center py-16">
+      <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-indigo-600 border-t-transparent mb-3"></div>
+      <p class="text-sm font-semibold text-slate-500">جاري مزامنة المحاضرات من Notion...</p>
+    </div>
+
+    <!-- حاوية التطبيق بعد التحميل -->
+    <div id="app-content" class="hidden">
+
+      <!-- ================= شريط الفلاتر والبحث ================= -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 mb-6">
+        <!-- البحث -->
+        <div class="relative mb-3">
+          <input type="text" id="search-input" placeholder="ابحث باسم المحاضرة، الدكتور، أو القسم..." 
+                 class="w-full pr-10 pl-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+          <span class="absolute right-3 top-3 text-slate-400">🔍</span>
+        </div>
+
+        <!-- القوائم المنسدلة للفلترة -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+          <!-- فلتر المادة / القسم -->
+          <div>
+            <label class="block font-bold text-slate-500 mb-1">القسم / المادة:</label>
+            <select id="filter-dept" class="w-full p-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="all">كل الأقسام</option>
+            </select>
+          </div>
+
+          <!-- فلتر الدكتور -->
+          <div>
+            <label class="block font-bold text-slate-500 mb-1">الدكتور:</label>
+            <select id="filter-doc" class="w-full p-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="all">كل الدكاترة</option>
+            </select>
+          </div>
+
+          <!-- فلتر الأسبوع -->
+          <div>
+            <label class="block font-bold text-slate-500 mb-1">الأسبوع:</label>
+            <select id="filter-week" class="w-full p-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="all">كل الأسابيع</option>
+            </select>
+          </div>
+
+          <!-- فلتر حالة القراءة -->
+          <div>
+            <label class="block font-bold text-slate-500 mb-1">حالة القراءة:</label>
+            <select id="filter-status" class="w-full p-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="all">كل الحالات</option>
+              <option value="none">❌ ما قاريها</option>
+              <option value="once">📖 قاريها مرة</option>
+              <option value="twice">⭐ قاريها مرتين</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- زر إعادة ضبط الفلاتر -->
+        <div class="mt-3 flex justify-between items-center pt-2 border-t border-slate-100 text-xs">
+          <span id="filtered-count" class="text-slate-500">يتم عرض: 0 محاضرة</span>
+          <button onclick="resetFilters()" class="text-indigo-600 hover:text-indigo-800 font-bold">
+            ↺ إعادة ضبط الفلاتر
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= 1. عرض القائمة (List View) ================= -->
+      <div id="view-list" class="space-y-3">
+        <!-- المحاضرات تظهر هنا برمجياً -->
+      </div>
+
+      <!-- ================= 2. عرض التقويم (Calendar View) ================= -->
+      <div id="view-calendar" class="hidden">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          
+          <!-- رأس التقويم والتنقل بين الأشهر -->
+          <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+            <button onclick="changeMonth(-1)" class="p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 shadow-sm transition">
+              ❮ الشهر السابق
+            </button>
+            <div class="text-center">
+              <h2 id="cal-month-year" class="font-bold text-base md:text-lg text-slate-800"></h2>
+              <button onclick="goToCurrentMonth()" class="text-xs text-indigo-600 font-bold hover:underline">اليوم</button>
+            </div>
+            <button onclick="changeMonth(1)" class="p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 shadow-sm transition">
+              الشهر القادم ❯
+            </button>
+          </div>
+
+          <!-- أيام الأسبوع -->
+          <div class="grid grid-cols-7 text-center text-xs font-bold text-slate-500 bg-slate-100/70 border-b border-slate-200 py-2.5">
+            <div>السبت</div>
+            <div>الأحد</div>
+            <div>الاثنين</div>
+            <div>الثلاثاء</div>
+            <div>الأربعاء</div>
+            <div>الخميس</div>
+            <div>الجمعة</div>
+          </div>
+
+          <!-- شبكة أيام الشهر -->
+          <div id="cal-grid" class="grid grid-cols-7 auto-rows-fr bg-slate-200 gap-px">
+            <!-- خلايا الأيام تُنشأ بالجافاسكربت -->
+          </div>
+        </div>
+
+        <!-- صندوق تفاصيل محاضرات اليوم المحدد في التقويم (مريح للموبايل) -->
+        <div id="cal-day-details" class="mt-4 bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
+          <h3 id="cal-selected-day-title" class="font-bold text-slate-800 text-sm mb-3">اختر يوماً من التقويم لعرض محاضراته</h3>
+          <div id="cal-selected-day-lectures" class="space-y-2"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ================= منطق البرمجة (JavaScript) ================= -->
+  <script>
+    // 🔴 1. ضع رابط الـ Cloudflare Worker الخاص بك هنا:
+    const API_URL = "https://lectures-api.memoe3227.workers.dev/";
+
+    let lecturesData = [];
+    let currentView = 'list';
+    
+    // متغيرات التقويم الشهري
+    let currentCalDate = new Date();
+    let selectedDateStr = null;
+
+    // أسماء الأشهر بالعربية
+    const ARABIC_MONTHS = [
+      "كانون الثاني (1)", "شباط (2)", "آذار (3)", "نيسان (4)",
+      "أيار (5)", "حزيران (6)", "تموز (7)", "آب (8)",
+      "أيلول (9)", "تشرين الأول (10)", "تشرين الثاني (11)", "كانون الأول (12)"
+    ];
+
+    // جلب البيانات من الـ Worker
+    async function loadLectures() {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+
+        if (data.notion_error || !Array.isArray(data)) {
+          throw new Error("خطأ من نوشن");
+        }
+
+        lecturesData = data;
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('app-content').classList.remove('hidden');
+
+        setupFilterOptions();
+        renderListView();
+        renderCalendar();
+        updateStats();
+
+      } catch (err) {
+        document.getElementById('loading').innerHTML = `
+          <div class="p-5 max-w-md mx-auto bg-red-50 border border-red-200 rounded-2xl text-red-700 text-sm">
+            <h3 class="font-bold mb-1">تعذر تحميل المحاضرات!</h3>
+            <p>تأكد من وضع رابط الـ Worker بشكل صحيح ومن ربط الـ Connections داخل Notion.</p>
+          </div>`;
+      }
+    }
+
+    // إدارة حالة القراءة لكل طالب في جهازه
+    function setStatus(lectureId, status) {
+      localStorage.setItem("status_" + lectureId, status);
+      renderListView();
+      renderCalendar();
+      if (selectedDateStr) renderDayDetails(selectedDateStr);
+      updateStats();
+    }
+
+    function getStatus(lectureId) {
+      return localStorage.getItem("status_" + lectureId) || "none";
+    }
+
+    // ملء خيارات الفلاتر ديناميكياً من بيانات المحاضرات
+    function setupFilterOptions() {
+      const depts = new Set();
+      const docs = new Set();
+      const weeks = new Set();
+
+      lecturesData.forEach(item => {
+        if (item.department && item.department !== "عام") depts.add(item.department);
+        if (item.doctor && item.doctor !== "غير محدد") docs.add(item.doctor);
+        if (item.week) weeks.add(String(item.week));
+      });
+
+      const deptSelect = document.getElementById('filter-dept');
+      depts.forEach(d => deptSelect.innerHTML += `<option value="${d}">${d}</option>`);
+
+      const docSelect = document.getElementById('filter-doc');
+      docs.forEach(d => docSelect.innerHTML += `<option value="${d}">${d}</option>`);
+
+      const weekSelect = document.getElementById('filter-week');
+      Array.from(weeks).sort((a,b) => Number(a) - Number(b)).forEach(w => {
+        weekSelect.innerHTML += `<option value="${w}">الأسبوع ${w}</option>`;
+      });
+
+      // ربط أحداث التغيير
+      document.getElementById('search-input').addEventListener('input', () => { renderListView(); renderCalendar(); });
+      ['filter-dept', 'filter-doc', 'filter-week', 'filter-status'].forEach(id => {
+        document.getElementById(id).addEventListener('change', () => { renderListView(); renderCalendar(); });
+      });
+    }
+
+    // تصفية المحاضرات بناءً على اختيارات الطالب
+    function getFilteredLectures() {
+      const search = document.getElementById('search-input').value.toLowerCase().trim();
+      const dept = document.getElementById('filter-dept').value;
+      const doc = document.getElementById('filter-doc').value;
+      const week = document.getElementById('filter-week').value;
+      const status = document.getElementById('filter-status').value;
+
+      return lecturesData.filter(item => {
+        const titleMatch = (item.title || "").toLowerCase().includes(search);
+        const deptMatch = (item.department || "").toLowerCase().includes(search);
+        const docMatch = (item.doctor || "").toLowerCase().includes(search);
+        const generalSearch = titleMatch || deptMatch || docMatch;
+
+        const deptFilter = (dept === 'all') || (item.department === dept);
+        const docFilter = (doc === 'all') || (item.doctor === doc);
+        const weekFilter = (week === 'all') || (String(item.week) === week);
+        const statusFilter = (status === 'all') || (getStatus(item.id) === status);
+
+        return generalSearch && deptFilter && docFilter && weekFilter && statusFilter;
+      });
+    }
+
+    // عرض القائمة الرئيسية (List View)
+    function renderListView() {
+      const container = document.getElementById('view-list');
+      const filtered = getFilteredLectures();
+      document.getElementById('filtered-count').innerText = `يتم عرض: ${filtered.length} من أصل ${lecturesData.length}`;
+
+      container.innerHTML = "";
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 bg-white rounded-2xl border border-slate-200">
+            <span class="text-3xl block mb-2">🔍</span>
+            <p class="text-sm font-semibold text-slate-500">لا توجد محاضرات تطابق هذه الفلاتر</p>
+          </div>`;
+        return;
+      }
+
+      filtered.forEach(item => {
+        const status = getStatus(item.id);
+        
+        let statusBorder = "border-slate-200";
+        let statusBadge = "bg-slate-100 text-slate-700";
+
+        if (status === 'once') {
+          statusBorder = "border-amber-300 bg-amber-50/20";
+          statusBadge = "bg-amber-100 text-amber-800 border border-amber-300";
+        } else if (status === 'twice') {
+          statusBorder = "border-emerald-300 bg-emerald-50/20";
+          statusBadge = "bg-emerald-100 text-emerald-800 border border-emerald-300";
+        }
+
+        const card = document.createElement('div');
+        card.className = `p-4 rounded-2xl border bg-white shadow-sm hover:shadow-md transition flex flex-col md:flex-row md:items-center justify-between gap-3 ${statusBorder}`;
+
+        card.innerHTML = `
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                ${item.department}
+              </span>
+              ${item.week ? `<span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">W${item.week}</span>` : ''}
+              <span class="text-[11px] text-slate-400">📅 ${item.date || 'غير محدد'}</span>
+              ${item.time ? `<span class="text-[11px] text-slate-400">⏰ ${item.time}</span>` : ''}
+            </div>
+            <h3 class="font-bold text-base text-slate-900">${item.title}</h3>
+            <p class="text-xs text-slate-500 font-medium">👨‍⚕️ ${item.doctor}</p>
+          </div>
+
+          <!-- القائمة المنسدلة للخيارات الثلاثة -->
+          <div class="pt-2 md:pt-0 border-t md:border-t-0 border-slate-100">
+            <select onchange="setStatus('${item.id}', this.value)" 
+                    class="w-full md:w-auto px-3 py-2 rounded-xl text-xs font-bold focus:outline-none cursor-pointer transition shadow-sm ${statusBadge}">
+              <option value="none" ${status === 'none' ? 'selected' : ''}>❌ ما قاريها</option>
+              <option value="once" ${status === 'once' ? 'selected' : ''}>📖 قاريها مرة</option>
+              <option value="twice" ${status === 'twice' ? 'selected' : ''}>⭐ قاريها مرتين</option>
+            </select>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // ================= التقويم الشهري (Calendar View) =================
+    function renderCalendar() {
+      const year = currentCalDate.getFullYear();
+      const month = currentCalDate.getMonth();
+
+      document.getElementById('cal-month-year').innerText = `${ARABIC_MONTHS[month]} ${year}`;
+
+      const grid = document.getElementById('cal-grid');
+      grid.innerHTML = "";
+
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const totalDays = lastDay.getDate();
+
+      // حساب إزاحة البداية (بحيث يبدأ الأسبوع بيوم السبت)
+      // في JS: السبت = 6، الأحد = 0
+      const startDayIndex = (firstDay.getDay() + 1) % 7;
+
+      // تجميع المحاضرات حسب التاريخ بصيغة YYYY-MM-DD
+      const filtered = getFilteredLectures();
+      const lecturesByDate = {};
+
+      filtered.forEach(item => {
+        if (!item.date) return;
+        const dStr = item.date.split('T')[0];
+        if (!lecturesByDate[dStr]) lecturesByDate[dStr] = [];
+        lecturesByDate[dStr].push(item);
+      });
+
+      // خلايا فارغة قبل بداية الشهر
+      for (let i = 0; i < startDayIndex; i++) {
+        grid.innerHTML += `<div class="bg-slate-50/50 min-h-[75px] md:min-h-[95px]"></div>`;
+      }
+
+      const todayStr = new Date().toISOString().split('T')[0];
+
+      // ملء أيام الشهر
+      for (let day = 1; day <= totalDays; day++) {
+        const mStr = String(month + 1).padStart(2, '0');
+        const dStr = String(day).padStart(2, '0');
+        const dateKey = `${year}-${mStr}-${dStr}`;
+
+        const dayLectures = lecturesByDate[dateKey] || [];
+        const isToday = (dateKey === todayStr);
+        const isSelected = (dateKey === selectedDateStr);
+
+        let cellClasses = "bg-white min-h-[75px] md:min-h-[95px] p-1.5 md:p-2 cursor-pointer transition hover:bg-indigo-50/40 flex flex-col justify-between";
+        if (isSelected) cellClasses += " ring-2 ring-indigo-600 z-10";
+
+        let chipsHtml = "";
+        dayLectures.slice(0, 2).forEach(lec => {
+          const st = getStatus(lec.id);
+          let dotColor = "bg-slate-400";
+          if (st === 'once') dotColor = "bg-amber-400";
+          if (st === 'twice') dotColor = "bg-emerald-500";
+
+          chipsHtml += `
+            <div class="truncate text-[10px] font-semibold bg-slate-100 rounded px-1 py-0.5 mt-0.5 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full ${dotColor} flex-shrink-0"></span>
+              <span class="truncate">${lec.title}</span>
+            </div>`;
+        });
+
+        if (dayLectures.length > 2) {
+          chipsHtml += `<div class="text-[9px] text-indigo-600 font-bold mt-0.5">+${dayLectures.length - 2} بعد</div>`;
+        }
+
+        const cell = document.createElement('div');
+        cell.className = cellClasses;
+        cell.onclick = () => selectCalendarDay(dateKey, dayLectures);
+
+        cell.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold ${isToday ? 'w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[11px]' : 'text-slate-700'}">
+                ${day}
+              </span>
+              ${dayLectures.length > 0 ? `<span class="text-[10px] font-bold text-indigo-600 md:hidden">• ${dayLectures.length}</span>` : ''}
+            </div>
+            <div class="hidden md:block">${chipsHtml}</div>
+          </div>
+        `;
+
+        grid.appendChild(cell);
+      }
+    }
+
+    function selectCalendarDay(dateKey, dayLectures) {
+      selectedDateStr = dateKey;
+      renderCalendar();
+      renderDayDetails(dateKey);
+    }
+
+    function renderDayDetails(dateKey) {
+      const container = document.getElementById('cal-selected-day-lectures');
+      const title = document.getElementById('cal-selected-day-title');
+
+      const filtered = getFilteredLectures();
+      const lectures = filtered.filter(item => (item.date || '').split('T')[0] === dateKey);
+
+      title.innerText = `محاضرات يوم (${dateKey}): ${lectures.length} محاضرة`;
+      container.innerHTML = "";
+
+      if (lectures.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400">لا توجد محاضرات مسجلة في هذا اليوم.</p>`;
+        return;
+      }
+
+      lectures.forEach(item => {
+        const st = getStatus(item.id);
+        const card = document.createElement('div');
+        card.className = "p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-2 text-xs";
+        card.innerHTML = `
+          <div>
+            <div class="font-bold text-slate-800">${item.title}</div>
+            <div class="text-[11px] text-slate-500">${item.department} • د. ${item.doctor}</div>
+          </div>
+          <select onchange="setStatus('${item.id}', this.value)" class="p-1.5 rounded-lg border text-xs font-bold bg-white">
+            <option value="none" ${st === 'none' ? 'selected' : ''}>❌ ما قاريها</option>
+            <option value="once" ${st === 'once' ? 'selected' : ''}>📖 قاريها مرة</option>
+            <option value="twice" ${st === 'twice' ? 'selected' : ''}>⭐ قاريها مرتين</option>
+          </select>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function changeMonth(delta) {
+      currentCalDate.setMonth(currentCalDate.getMonth() + delta);
+      renderCalendar();
+    }
+
+    function goToCurrentMonth() {
+      currentCalDate = new Date();
+      selectedDateStr = new Date().toISOString().split('T')[0];
+      renderCalendar();
+      renderDayDetails(selectedDateStr);
+    }
+
+    // التبديل بين التبويبات
+    function switchView(view) {
+      currentView = view;
+      const listBtn = document.getElementById('tab-list-btn');
+      const calBtn = document.getElementById('tab-cal-btn');
+      const listView = document.getElementById('view-list');
+      const calView = document.getElementById('view-calendar');
+
+      if (view === 'list') {
+        listBtn.className = "px-3 py-1.5 rounded-lg transition bg-white text-indigo-900 shadow";
+        calBtn.className = "px-3 py-1.5 rounded-lg transition text-indigo-200 hover:text-white";
+        listView.classList.remove('hidden');
+        calView.classList.add('hidden');
+      } else {
+        calBtn.className = "px-3 py-1.5 rounded-lg transition bg-white text-indigo-900 shadow";
+        listBtn.className = "px-3 py-1.5 rounded-lg transition text-indigo-200 hover:text-white";
+        calView.classList.remove('hidden');
+        listView.classList.add('hidden');
+        renderCalendar();
+      }
+    }
+
+    // تصفير الفلاتر
+    function resetFilters() {
+      document.getElementById('search-input').value = "";
+      document.getElementById('filter-dept').value = "all";
+      document.getElementById('filter-doc').value = "all";
+      document.getElementById('filter-week').value = "all";
+      document.getElementById('filter-status').value = "all";
+      renderListView();
+      renderCalendar();
+    }
+
+    // تحديث شريط الإحصائيات ونسبة الإنجاز
+    function updateStats() {
+      const total = lecturesData.length;
+      let none = 0, once = 0, twice = 0;
+
+      lecturesData.forEach(item => {
+        const st = getStatus(item.id);
+        if (st === 'once') once++;
+        else if (st === 'twice') twice++;
+        else none++;
+      });
+
+      document.getElementById('stat-total').innerText = total;
+      document.getElementById('stat-none').innerText = none;
+      document.getElementById('stat-once').innerText = once;
+      document.getElementById('stat-twice').innerText = twice;
+
+      // حساب نسبة الإنجاز (المقروءة مرة تحتسب 60%، والمقروءة مرتين تحتسب 100%)
+      const completedPoints = (once * 0.6) + (twice * 1.0);
+      const percentage = total > 0 ? Math.round((completedPoints / total) * 100) : 0;
+
+      document.getElementById('progress-bar-fill').style.width = percentage + "%";
+      document.getElementById('progress-text').innerText = `نسبة الإنجاز الإجمالية: ${percentage}%`;
+
+      const quote = document.getElementById('motivational-quote');
+      if (percentage >= 80) quote.innerText = "أداء أسطوري! قربت تختمها ⭐";
+      else if (percentage >= 50) quote.innerText = "عاشت إيدك، قطعت أكثر من نص الطريق 💪";
+      else if (percentage > 0) quote.innerText = "استمر وبداية موفقة 📖";
+      else quote.innerText = "يلا نبدأ الدراسة اليوم! ✨";
+    }
+
+    // بدء التشغيل
+    loadLectures();
+  </script>
+</body>
+</html>
