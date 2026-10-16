@@ -1,713 +1,376 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="light">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بوابة المحاضرات والمهام</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: { 
-            darkBg: '#09090b',    /* Zinc 950 - Almost Black */
-            darkCard: '#18181b',  /* Zinc 900 */
-            darkBorder: '#27272a',/* Zinc 800 */
-            brandGreen: '#10b981' /* Emerald 500 */
-          }
-        }
-      }
-    }
-  </script>
-
-  <script>
-    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  </script>
-
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s, color 0.3s; }
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 4px; }
-    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #3f3f46; }
-    @keyframes pop { 0% { transform: scale(0.95); } 100% { transform: scale(1); } }
-    .animate-pop { animation: pop 0.2s ease-out; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>منصة المحاضرات</title>
+<meta name="theme-color" content="#059669">
+<script>
+if(localStorage.getItem('theme')==='dark'||(!('theme' in localStorage)&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark');
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f6f5;--card:#fff;--tx:#0f1a15;--mu:#5f6f67;--bd:#e1e7e4;--soft:#eef2f0;--pr:#047857;--prs:#d8f3e8;--on:#fff;--s0:#98a2a0;--s1:#d97706;--s2:#2563eb;--s3:#059669;color-scheme:light}
+:root.dark{--bg:#0b0f0d;--card:#131916;--tx:#eef4f1;--mu:#93a39b;--bd:#232d28;--soft:#1a221e;--pr:#34d399;--prs:#0d3326;--on:#04210f;--s1:#fbbf24;--s2:#60a5fa;--s3:#34d399;color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+body{font-family:'Tajawal',system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.5;padding-bottom:calc(76px + env(safe-area-inset-bottom));-webkit-tap-highlight-color:transparent}
+button,select,input{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--pr);outline-offset:2px}
+svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px}
+/* top bar + nav */
+.top{position:sticky;top:0;z-index:30;background:var(--card);border-bottom:1px solid var(--bd)}
+.bar{display:flex;align-items:center;gap:12px;height:56px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;margin-inline-end:auto}
+.logo{width:34px;height:34px;border-radius:10px;background:var(--pr);color:var(--on);display:grid;place-items:center}
+.sq{width:38px;height:38px;border-radius:10px;border:1px solid var(--bd);display:grid;place-items:center;color:var(--mu)}
+.sq:hover{background:var(--soft)}
+nav{position:fixed;inset:auto 0 0 0;z-index:30;display:flex;background:var(--card);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 8px;font-size:11px;font-weight:500;color:var(--mu)}
+nav button.on{color:var(--pr);font-weight:700}
+nav em{font-style:normal;position:absolute;top:3px;inset-inline-start:calc(50% + 6px);min-width:16px;padding:0 5px;border-radius:99px;background:var(--pr);color:var(--on);font-size:10px;line-height:16px;text-align:center}
+nav em:empty{display:none}
+@media(min-width:820px){nav{position:static;border:0;background:none;padding:0;order:2}
+nav button{flex:none;flex-direction:row;gap:7px;padding:8px 14px;font-size:14px;border-radius:10px}
+nav button.on{background:var(--prs)}nav em{position:static}.brand{margin:0}.bar{justify-content:space-between}.bar .sq{order:3}}
+main{padding-top:16px}
+/* dashboard */
+.dash{display:flex;gap:18px;align-items:center;padding:16px;margin-bottom:12px}
+.ring{position:relative;width:84px;height:84px;flex:none}
+.ring svg{transform:rotate(-90deg);width:100%;height:100%}
+.ring circle{fill:none;stroke-width:3.4;stroke:var(--soft)}
+.ring circle.fg{stroke:var(--pr);stroke-linecap:round;transition:stroke-dasharray .6s}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:20px;font-weight:800}
+.dash h2{font-size:16px}.dash p{color:var(--mu);font-size:13px;margin-bottom:8px}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pills span{display:flex;align-items:center;gap:6px;font-size:12px;padding:3px 10px;border-radius:99px;background:var(--soft);color:var(--mu)}
+.pills b{color:var(--tx)}.pills i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+/* filters */
+.fb{padding:10px;margin-bottom:14px}
+.frow{display:flex;gap:8px}
+.search{position:relative;flex:1}
+.search svg{position:absolute;inset-inline-start:12px;top:12px;color:var(--mu)}
+.search input{width:100%;height:42px;padding-inline:38px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);font-size:14px}
+.fbtn{position:relative;height:42px;padding:0 14px;display:flex;align-items:center;gap:6px;border:1px solid var(--bd);border-radius:10px;font-size:13px;font-weight:700}
+.fbtn em{font-style:normal;background:var(--pr);color:var(--on);border-radius:99px;font-size:11px;min-width:18px;line-height:18px;text-align:center}
+.fbtn em:empty{display:none}
+.fpanel{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid var(--bd)}
+.fpanel label{font-size:12px;color:var(--mu);font-weight:700;display:grid;gap:4px}
+select{height:40px;padding:0 10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);font-size:14px;width:100%}
+.clr{grid-column:1/-1;color:var(--pr);font-weight:700;font-size:13px;justify-self:start}
+@media(min-width:700px){.fpanel{grid-template-columns:repeat(5,1fr)}.clr{grid-column:auto;align-self:end;height:40px}}
+/* lecture card */
+.list{display:grid;gap:10px}
+.lec{--c:var(--s0);background:var(--card);border:1px solid var(--bd);border-inline-start:4px solid var(--c);border-radius:14px;padding:14px 14px 12px}
+.lec.once{--c:var(--s1)}.lec.twice{--c:var(--s2)}.lec.thrice{--c:var(--s3)}
+.lh{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:2px 9px;border-radius:7px;background:var(--soft);color:var(--mu)}
+.chip svg{width:13px;height:13px}.chip.dep{background:var(--prs);color:var(--pr);font-weight:700}
+.ib{width:36px;height:36px;margin:-4px;border-radius:10px;display:grid;place-items:center;color:var(--mu);flex:none}
+.ib:hover{background:var(--soft)}.ib.on{color:var(--pr)}.ib.on svg{fill:currentColor}
+.lec h3{font-size:17px;font-weight:700;line-height:1.45;margin:8px 0 2px}
+.doc{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mu)}.doc svg{width:14px;height:14px}
+.act{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)}
+.seg{display:flex;flex:1;min-width:230px;padding:3px;border-radius:11px;background:var(--soft)}
+.seg button{flex:1;padding:7px 4px;border-radius:8px;font-size:12.5px;color:var(--mu);font-weight:500;white-space:nowrap}
+.seg button.on{background:var(--c);color:#fff;font-weight:700}
+:root.dark .seg button.on{color:#04210f}
+.mcq{display:flex;align-items:center;justify-content:center;gap:6px;padding:0 14px;height:38px;border:1px solid var(--bd);border-radius:11px;font-size:13px;font-weight:700;color:var(--mu)}
+.mcq.on{background:var(--prs);border-color:var(--pr);color:var(--pr)}
+/* groups, empty */
+.gh{position:sticky;top:56px;z-index:5;display:flex;align-items:center;gap:8px;padding:10px 2px;margin-top:10px;background:var(--bg);font-size:14px;font-weight:800}
+.gh em{font-style:normal;font-size:12px;font-weight:500;color:var(--mu);background:var(--soft);padding:0 9px;border-radius:99px}
+.empty{text-align:center;padding:44px 20px;border:1.5px dashed var(--bd);border-radius:14px;color:var(--mu);font-size:14px}
+.empty svg{width:34px;height:34px;margin-bottom:8px;opacity:.6}
+.vh{padding:14px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.vh h2{font-size:17px}.vh p{font-size:13px;color:var(--mu)}
+/* exams */
+.ex{display:flex;align-items:center;gap:14px;padding:12px 14px;margin-bottom:10px}
+.ex.past{opacity:.55}
+.dbox{width:54px;flex:none;text-align:center;border-radius:11px;background:var(--soft);padding:6px 0}
+.dbox b{display:block;font-size:20px;line-height:1.1}.dbox span{font-size:11px;color:var(--mu)}
+.ex h3{font-size:16px}.ex p{font-size:12.5px;color:var(--mu)}
+.ex>div:nth-child(2){flex:1;min-width:0}
+.badge{padding:5px 12px;border-radius:99px;font-size:13px;font-weight:700;background:var(--soft);white-space:nowrap}
+.badge.warn{background:#fef0d9;color:#9a5300}.badge.hot{background:#fde2e2;color:#b42318}
+:root.dark .badge.warn{background:#3a2a0a;color:#fbbf24}:root.dark .badge.hot{background:#3d1414;color:#f87171}
+/* calendar */
+.ch{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--bd)}
+.ch h2{font-size:16px;text-align:center}.ch .t{display:block;margin:auto;font-size:12px;color:var(--pr);font-weight:700}
+.ch .sq{width:auto;padding:0 12px;font-size:13px;height:34px}
+.dn{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:11px;color:var(--mu);font-weight:700;padding:8px 0}
+.cg{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--bd);border-top:1px solid var(--bd)}
+.cg>*{background:var(--card);min-height:58px;padding:6px 4px;display:flex;flex-direction:column;align-items:center;gap:5px}
+.cg button:hover{background:var(--soft)}
+.cg .n{font-size:13px;font-weight:700;width:26px;height:26px;display:grid;place-items:center;border-radius:50%}
+.cg .td .n{background:var(--pr);color:var(--on)}
+.cg .sel{box-shadow:inset 0 0 0 2px var(--pr)}
+.dots{display:flex;gap:3px;flex-wrap:wrap;justify-content:center}.dots i{width:6px;height:6px;border-radius:50%;background:var(--c)}
+.sub{margin-top:12px;padding:14px}.sub h3{font-size:14px;margin-bottom:10px}
+.ld{padding:60px 0;text-align:center;color:var(--mu)}
+.sp{width:34px;height:34px;margin:0 auto 12px;border:3px solid var(--pr);border-top-color:transparent;border-radius:50%;animation:r .8s linear infinite}
+@keyframes r{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
 </head>
-<body class="bg-zinc-50 text-zinc-900 dark:bg-darkBg dark:text-zinc-200 min-h-screen pb-20 selection:bg-brandGreen selection:text-white">
+<body>
+<header class="top"><div class="wrap bar">
+  <div class="brand"><span class="logo" id="logo"></span>منصة المحاضرات</div>
+  <nav id="nav" aria-label="التنقل"></nav>
+  <button class="sq" data-a="theme" id="theme" aria-label="تغيير المظهر"></button>
+</div></header>
 
-  <!-- ================= Header & Stats ================= -->
-  <header class="bg-gradient-to-r from-emerald-600 to-teal-700 dark:from-darkCard dark:to-darkBg dark:border-b dark:border-darkBorder text-white shadow-lg sticky top-0 z-40 transition-colors duration-300">
-    <div class="max-w-5xl mx-auto px-4 py-4">
-      
-      <div class="flex items-center justify-between mb-4">
-        <div class="flex items-center gap-3">
-          <div class="w-11 h-11 rounded-xl bg-white/10 dark:bg-zinc-800 backdrop-blur flex items-center justify-center text-2xl shadow-inner border border-white/20 dark:border-zinc-700">
-            🎓
-          </div>
-          <div>
-            <h1 class="text-xl md:text-2xl font-bold tracking-tight dark:text-zinc-100">منصة المحاضرات</h1>
-          </div>
-        </div>
-        <button onclick="toggleDarkMode()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-white/20 dark:border-zinc-700 transition text-lg" title="تغيير المظهر">
-          <span id="theme-icon">🌙</span>
-        </button>
+<main class="wrap">
+  <div id="loading" class="ld"><div class="sp"></div>جاري تحميل المحاضرات...</div>
+  <div id="app" hidden>
+    <section id="dash" class="card dash">
+      <div class="ring"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9"/><circle class="fg" id="ringfg" cx="18" cy="18" r="15.9" pathLength="100" stroke-dasharray="0 100"/></svg><b id="pct">0%</b></div>
+      <div><h2>نسبة الإنجاز</h2><p id="sub"></p>
+        <div class="pills" id="pills"></div></div>
+    </section>
+
+    <section id="filters" class="card fb">
+      <div class="frow">
+        <div class="search"><span id="sicon"></span><input id="search-input" type="search" placeholder="ابحث عن محاضرة أو دكتور أو مادة" aria-label="بحث"></div>
+        <button class="fbtn" data-a="fp" id="fbtn"><span id="ficon"></span>فلاتر<em id="fbadge"></em></button>
       </div>
-
-      <!-- أزرار التبويبات -->
-      <div class="flex gap-1.5 bg-black/20 dark:bg-black/40 p-1.5 rounded-xl border border-white/10 dark:border-zinc-800 text-[11px] md:text-xs font-bold mb-4 overflow-x-auto custom-scrollbar">
-        <button id="tab-today-btn" onclick="switchView('today')" class="flex-1 px-3 py-2.5 rounded-lg transition text-zinc-200 hover:text-white min-w-[70px]">
-          ⚡ اليوم (<span id="today-count">0</span>)
-        </button>
-        <button id="tab-list-btn" onclick="switchView('list')" class="flex-1 px-3 py-2.5 rounded-lg transition bg-white text-emerald-900 shadow min-w-[70px]">
-          📋 القائمة
-        </button>
-        <button id="tab-todo-btn" onclick="switchView('todo')" class="flex-1 px-3 py-2.5 rounded-lg transition text-zinc-200 hover:text-white min-w-[70px]">
-          📌 المهام (<span id="todo-count">0</span>)
-        </button>
-        <button id="tab-exams-btn" onclick="switchView('exams')" class="flex-1 px-3 py-2.5 rounded-lg transition text-zinc-200 hover:text-white min-w-[70px]">
-          📝 الامتحانات
-        </button>
-        <button id="tab-cal-btn" onclick="switchView('calendar')" class="flex-1 px-3 py-2.5 rounded-lg transition text-zinc-200 hover:text-white min-w-[70px]">
-          📅 التقويم
-        </button>
+      <div class="fpanel" id="fpanel" hidden>
+        <label>تجميع حسب<select id="group-by"><option value="none">بدون تجميع</option><option value="department">المادة</option><option value="doctor">الدكتور</option><option value="week">الأسبوع</option></select></label>
+        <label>المادة<select id="filter-dept"></select></label>
+        <label>الدكتور<select id="filter-doc"></select></label>
+        <label>الأسبوع<select id="filter-week"></select></label>
+        <label>الحالة<select id="filter-status"><option value="all">الكل</option><option value="none">ما قاريها</option><option value="once">مرة واحدة</option><option value="twice">مرتين</option><option value="thrice">3 مرات</option></select></label>
+        <button class="clr" data-a="clr">مسح الفلاتر</button>
       </div>
+    </section>
 
-      <!-- شريط التقدم والإحصائيات -->
-      <div class="bg-white/10 dark:bg-zinc-800/50 backdrop-blur-md rounded-2xl p-4 border border-white/15 dark:border-zinc-700/50 shadow-inner">
-        <div class="flex items-center justify-between text-xs mb-2 font-bold dark:text-zinc-300">
-          <span id="progress-text">نسبة الإنجاز: 0%</span>
-          <span class="text-emerald-100 dark:text-emerald-400 hidden sm:inline">أبطال الدفعة! 🚀</span>
-        </div>
-        <div class="w-full bg-black/30 dark:bg-zinc-950 rounded-full h-3 overflow-hidden p-0.5">
-          <div id="progress-bar-fill" class="bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500 dark:from-emerald-700 dark:via-emerald-500 dark:to-emerald-400 h-full rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
-        </div>
-
-        <div class="flex justify-between mt-4 pt-3 border-t border-white/10 dark:border-zinc-700/50 text-center text-[10px] sm:text-xs font-bold">
-          <div><span class="text-zinc-200 dark:text-zinc-400 block text-[9px] font-normal mb-0.5">المجموع</span><span id="stat-total" class="text-sm dark:text-zinc-200">0</span></div>
-          <div><span class="text-zinc-200 dark:text-zinc-400 block text-[9px] font-normal mb-0.5">قراءة 1</span><span id="stat-once" class="text-emerald-300 dark:text-emerald-400 text-sm">0</span></div>
-          <div><span class="text-zinc-200 dark:text-zinc-400 block text-[9px] font-normal mb-0.5">قراءة 2</span><span id="stat-twice" class="text-emerald-300 dark:text-emerald-400 text-sm">0</span></div>
-          <div><span class="text-zinc-200 dark:text-zinc-400 block text-[9px] font-normal mb-0.5">قراءة 3</span><span id="stat-thrice" class="text-emerald-300 dark:text-emerald-400 text-sm">0</span></div>
-          <div class="border-r border-white/20 dark:border-zinc-600/50 pr-3"><span class="text-zinc-200 dark:text-zinc-400 block text-[9px] font-normal mb-0.5">MCQs</span><span id="stat-mcq" class="text-emerald-300 dark:text-emerald-400 text-sm">0</span></div>
-        </div>
+    <section class="view" id="v-today" hidden>
+      <div class="card vh"><div><h2>محاضرات اليوم</h2><p id="today-date"></p></div></div>
+      <div class="list" id="today-list"></div>
+    </section>
+    <section class="view" id="v-list"><div class="list" id="list"></div></section>
+    <section class="view" id="v-todo" hidden>
+      <div class="card vh"><div><h2>مهامي</h2><p>المحاضرات التي ثبّتّها لدراستها قريباً.</p></div></div>
+      <div class="list" id="todo-list"></div>
+    </section>
+    <section class="view" id="v-exams" hidden>
+      <div class="card vh">
+        <div><h2>جدول الامتحانات</h2><p>يُحسب الموعد تلقائياً حسب الكروب.</p></div>
+        <label style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px">الكروب
+          <select id="user-group-select" style="width:auto"><optgroup label="Group A"><option>A1</option><option>A2</option><option>A3</option><option>A4</option><option>A5</option></optgroup><optgroup label="Group B"><option>B1</option><option>B2</option><option>B3</option><option>B4</option><option>B5</option></optgroup></select></label>
       </div>
-    </div>
-  </header>
-
-  <!-- ================= المحتوى الرئيسي ================= -->
-  <main class="max-w-5xl mx-auto px-4 mt-6">
-
-    <div id="loading" class="text-center py-16">
-      <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-emerald-500 border-t-transparent mb-3"></div>
-      <p class="text-sm font-semibold text-zinc-500 dark:text-zinc-400">جاري سحب البيانات...</p>
-    </div>
-
-    <div id="app-content" class="hidden">
-
-      <!-- ================= شريط الفلاتر والبحث ================= -->
-      <div id="filters-container" class="bg-white dark:bg-darkCard rounded-2xl p-5 shadow-sm border border-zinc-200 dark:border-darkBorder mb-6 transition-colors">
-        
-        <div class="relative mb-4">
-          <input type="text" id="search-input" placeholder="ابحث باسم المحاضرة، الدكتور، أو القسم..." 
-                 class="w-full pr-10 pl-4 py-3 rounded-xl border border-zinc-200 dark:border-darkBorder bg-zinc-50 dark:bg-zinc-950 dark:text-zinc-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors placeholder-zinc-400 dark:placeholder-zinc-600">
-          <span class="absolute right-3 top-3.5 text-zinc-400 dark:text-zinc-500">🔍</span>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs">
-          <div class="col-span-2 md:col-span-1 border-l-0 md:border-l border-zinc-200 dark:border-darkBorder md:pl-3">
-            <label class="block font-bold text-emerald-700 dark:text-emerald-500 mb-1.5">تجميع حسب:</label>
-            <select id="group-by" class="w-full p-2.5 rounded-xl border border-zinc-200 dark:border-darkBorder bg-zinc-50 dark:bg-zinc-950 dark:text-zinc-200 focus:ring-2 focus:ring-emerald-500 outline-none">
-              <option value="none">بدون تجميع (قائمة)</option>
-              <option value="department">القسم / المادة</option>
-              <option value="doctor">اسم الدكتور</option>
-              <option value="week">الأسبوع</option>
-            </select>
-          </div>
-          <div>
-            <label class="block font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">المادة:</label>
-            <select id="filter-dept" class="w-full p-2.5 rounded-xl border border-zinc-200 dark:border-darkBorder bg-zinc-50 dark:bg-zinc-950 dark:text-zinc-200 outline-none focus:ring-2 focus:ring-emerald-500"></select>
-          </div>
-          <div>
-            <label class="block font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">الدكتور:</label>
-            <select id="filter-doc" class="w-full p-2.5 rounded-xl border border-zinc-200 dark:border-darkBorder bg-zinc-50 dark:bg-zinc-950 dark:text-zinc-200 outline-none focus:ring-2 focus:ring-emerald-500"></select>
-          </div>
-          <div>
-            <label class="block font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">الأسبوع:</label>
-            <select id="filter-week" class="w-full p-2.5 rounded-xl border border-zinc-200 dark:border-darkBorder bg-zinc-50 dark:bg-zinc-950 dark:text-zinc-200 outline-none focus:ring-2 focus:ring-emerald-500"></select>
-          </div>
-          <div>
-            <label class="block font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">الحالة:</label>
-            <select id="filter-status" class="w-full p-2.5 rounded-xl border border-zinc-200 dark:border-darkBorder bg-zinc-50 dark:bg-zinc-950 dark:text-zinc-200 outline-none focus:ring-2 focus:ring-emerald-500">
-              <option value="all">الكل</option>
-              <option value="none">❌ ما قاريها</option>
-              <option value="once">📖 مرة واحدة</option>
-              <option value="twice">⭐ مرتين</option>
-              <option value="thrice">🔥 3 مرات</option>
-            </select>
-          </div>
-        </div>
+      <div id="exams-list"></div>
+    </section>
+    <section class="view" id="v-calendar" hidden>
+      <div class="card" style="overflow:hidden">
+        <div class="ch"><button class="sq" data-a="mo" data-v="-1">← السابق</button>
+          <div><h2 id="cal-title"></h2><button class="t" data-a="now">اليوم</button></div>
+          <button class="sq" data-a="mo" data-v="1">التالي →</button></div>
+        <div class="dn"><span>السبت</span><span>الأحد</span><span>الاثنين</span><span>الثلاثاء</span><span>الأربعاء</span><span>الخميس</span><span>الجمعة</span></div>
+        <div class="cg" id="cal-grid"></div>
       </div>
+      <div class="card sub"><h3 id="day-title"></h3><div class="list" id="day-list"></div></div>
+    </section>
+  </div>
+</main>
 
-      <!-- ================= 1. عرض محاضرات اليوم ================= -->
-      <div id="view-today" class="hidden space-y-4">
-        <div class="bg-emerald-50 dark:bg-darkCard p-5 rounded-2xl border border-emerald-200 dark:border-darkBorder flex items-center justify-between shadow-sm">
-          <div class="flex items-center gap-4">
-            <span class="text-4xl drop-shadow-sm">⚡</span> 
-            <div>
-              <h2 class="text-xl font-bold text-emerald-900 dark:text-emerald-400">محاضرات اليوم</h2>
-              <p id="today-date-text" class="text-sm font-semibold text-emerald-700 dark:text-zinc-400 mt-1"></p>
-            </div>
-          </div>
-        </div>
-        <div id="today-container" class="space-y-4"></div>
-      </div>
+<script>
+const API_URL = "https://lectures-api.memoe3227.workers.dev/";
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const I = {
+  today:'M13 2 3 14h9l-1 8 10-12h-9z', list:'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01',
+  pin:'m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z',
+  exams:'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h8',
+  calendar:'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z',
+  search:'m21 21-4.3-4.3M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z',
+  user:'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z', check:'M20 6 9 17l-5-5',
+  sun:'M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4',
+  moon:'M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z', filter:'M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6',
+  cap:'M22 10 12 5 2 10l10 5zM6 12v5c3 2 9 2 12 0v-5'
+};
+const ic = k => `<svg class="i" viewBox="0 0 24 24"><path d="${I[k]}"/></svg>`;
+const TABS = [['today','اليوم'],['list','المحاضرات'],['todo','المهام'],['exams','الامتحانات'],['calendar','التقويم']];
+const ST = [['none','ما قاريها'],['once','مرة'],['twice','مرتين'],['thrice','3 مرات']];
+const MONTHS = ["كانون 2","شباط","آذار","نيسان","أيار","حزيران","تموز","آب","أيلول","تشرين 1","تشرين 2","كانون 1"];
+const scheduleOffsets = {
+  "1":{"Internal Medicine":0,"باطنية":0,"Forensic":1,"عدلي":1,"Community":2,"مجتمع":2,"Obstetrics":3,"توليد":3,"Surgery":4,"جراحة":4},
+  "2":{"Surgery":0,"جراحة":0,"Internal Medicine":1,"باطنية":1,"Forensic":2,"عدلي":2,"Community":3,"مجتمع":3,"Obstetrics":4,"توليد":4},
+  "3":{"Obstetrics":0,"توليد":0,"Surgery":1,"جراحة":1,"Internal Medicine":2,"باطنية":2,"Forensic":3,"عدلي":3,"Community":4,"مجتمع":4},
+  "4":{"Community":0,"مجتمع":0,"Obstetrics":1,"توليد":1,"Surgery":2,"جراحة":2,"Internal Medicine":3,"باطنية":3,"Forensic":4,"عدلي":4},
+  "5":{"Forensic":0,"عدلي":0,"Community":1,"مجتمع":1,"Obstetrics":2,"توليد":2,"Surgery":3,"جراحة":3,"Internal Medicine":4,"باطنية":4}
+};
+const Storage = {
+  get:(k,id,d)=>localStorage.getItem(`${k}_${id}`)||d,
+  set:(k,id,v)=>localStorage.setItem(`${k}_${id}`,v),
+  toggle:(k,id)=>{const c=Storage.get(k,id,'false')==='true';Storage.set(k,id,c?'false':'true')}
+};
+let L=[], E=[], view='list', cal=new Date(), selDate=null;
+const dOf = i => (i.date||'').split('T')[0];
+const pad = n => String(n).padStart(2,'0');
+const key = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const today = () => key(new Date());
+const ar = (d,o) => d.toLocaleDateString('ar-IQ',o);
 
-      <!-- ================= 2. عرض القائمة ================= -->
-      <div id="view-list" class="space-y-4"></div>
+/* ---------- init ---------- */
+$('logo').innerHTML = ic('cap'); $('sicon').innerHTML = ic('search'); $('ficon').innerHTML = ic('filter');
+$('nav').innerHTML = TABS.map(([k,l])=>`<button data-a="view" data-v="${k}" id="t-${k}">${ic(k)}<span>${l}</span>${k==='today'||k==='todo'?`<em id="n-${k}"></em>`:''}</button>`).join('');
+$('today-date').textContent = ar(new Date(),{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+$('user-group-select').value = localStorage.getItem('user_exam_group') || 'A1';
+const setThemeIcon = () => $('theme').innerHTML = ic(document.documentElement.classList.contains('dark') ? 'sun' : 'moon');
+setThemeIcon();
 
-      <!-- ================= 3. عرض المهام ================= -->
-      <div id="view-todo" class="hidden space-y-4">
-        <div class="bg-zinc-100 dark:bg-darkCard p-5 rounded-2xl border border-zinc-200 dark:border-darkBorder text-sm font-bold text-zinc-800 dark:text-zinc-300 flex items-center gap-3 shadow-sm">
-          <span class="text-2xl">📌</span> 
-          <p>هذه القائمة خاصة بك لجمع المحاضرات التي تحتاج مراجعتها أو دراستها قريباً.</p>
-        </div>
-        <div id="todo-container" class="space-y-4"></div>
-      </div>
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-a]'); if (!b) return;
+  const {a,id,v} = b.dataset;
+  if (a==='view') return go(v);
+  if (a==='theme') { const d=document.documentElement.classList.toggle('dark'); localStorage.setItem('theme',d?'dark':'light'); return setThemeIcon(); }
+  if (a==='fp') { $('fpanel').hidden = !$('fpanel').hidden; return; }
+  if (a==='retry') return load();
+  if (a==='st') Storage.set('status',id,v);
+  else if (a==='mcq') Storage.toggle('mcq',id);
+  else if (a==='todo') Storage.toggle('todo',id);
+  else if (a==='day') selDate = v;
+  else if (a==='mo') { cal.setDate(1); cal.setMonth(cal.getMonth()+Number(v)); }
+  else if (a==='now') { cal = new Date(); selDate = today(); }
+  else if (a==='clr') { ['filter-dept','filter-doc','filter-week','filter-status'].forEach(i=>$(i).value='all'); $('group-by').value='none'; $('search-input').value=''; }
+  render();
+});
+$('user-group-select').addEventListener('change', e => { localStorage.setItem('user_exam_group', e.target.value); render(); });
 
-      <!-- ================= 4. عرض الامتحانات ================= -->
-      <div id="view-exams" class="hidden space-y-5">
-        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl border border-zinc-200 dark:border-darkBorder shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div>
-            <h2 class="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              📝 جدول الامتحانات
-            </h2>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">يتم حساب موعد الامتحان التلقائي بناءً على الكروب الخاص بك.</p>
-          </div>
-          <div class="w-full md:w-auto flex items-center gap-3 bg-zinc-50 dark:bg-zinc-950 p-2 rounded-xl border border-zinc-200 dark:border-darkBorder">
-            <label class="text-sm font-bold text-zinc-700 dark:text-zinc-300 whitespace-nowrap pl-2">الكروب:</label>
-            <select id="user-group-select" onchange="updateGroupAndRender()" class="bg-white dark:bg-darkCard border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2 outline-none cursor-pointer">
-              <optgroup label="Group A">
-                <option value="A1">A1</option><option value="A2">A2</option><option value="A3">A3</option><option value="A4">A4</option><option value="A5">A5</option>
-              </optgroup>
-              <optgroup label="Group B">
-                <option value="B1">B1</option><option value="B2">B2</option><option value="B3">B3</option><option value="B4">B4</option><option value="B5">B5</option>
-              </optgroup>
-            </select>
-          </div>
-        </div>
-        <div id="exams-container" class="space-y-3"></div>
-      </div>
+/* ---------- data ---------- */
+async function load() {
+  $('loading').hidden = false; $('app').hidden = true;
+  $('loading').innerHTML = '<div class="sp"></div>جاري تحميل المحاضرات...';
+  try {
+    const res = await fetch(API_URL + "?nocache=" + Date.now(), {cache:"no-store"});
+    const data = await res.json();
+    if (data && data.lectures) { L = data.lectures; E = data.exams || []; }
+    else if (Array.isArray(data)) L = data;
+    selDate = today();
+    $('loading').hidden = true; $('app').hidden = false;
+    setupFilters(); go(view);
+  } catch (err) {
+    $('loading').innerHTML = `<p style="color:#b42318;font-weight:700;margin-bottom:10px">تعذر الاتصال بقاعدة البيانات.</p><button class="fbtn" style="margin:auto" data-a="retry">إعادة المحاولة</button>`;
+  }
+}
+function setupFilters() {
+  const dp=new Set(), dc=new Set(), wk=new Set();
+  L.forEach(i => { if(i.department && i.department!=="عام") dp.add(i.department); if(i.doctor && i.doctor!=="غير محدد") dc.add(i.doctor); if(i.week) wk.add(String(i.week)); });
+  const fill = (id,set,label) => $(id).innerHTML = `<option value="all">كل ${label}</option>` + [...set].sort().map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+  fill('filter-dept',dp,'المواد'); fill('filter-doc',dc,'الدكاترة'); fill('filter-week',wk,'الأسابيع');
+  ['search-input','filter-dept','filter-doc','filter-week','filter-status','group-by'].forEach(id =>
+    $(id).addEventListener(id==='search-input'?'input':'change', render));
+}
+function filtered() {
+  const q=$('search-input').value.toLowerCase().trim(), dep=$('filter-dept').value, doc=$('filter-doc').value, w=$('filter-week').value, st=$('filter-status').value;
+  return L.filter(i =>
+    ((i.title||"")+(i.department||"")+(i.doctor||"")).toLowerCase().includes(q) &&
+    (dep==='all'||i.department===dep) && (doc==='all'||i.doctor===doc) &&
+    (w==='all'||String(i.week)===w) && (st==='all'||Storage.get('status',i.id,'none')===st));
+}
 
-      <!-- ================= 5. عرض التقويم ================= -->
-      <div id="view-calendar" class="hidden">
-        <div class="bg-white dark:bg-darkCard rounded-2xl shadow-sm border border-zinc-200 dark:border-darkBorder overflow-hidden">
-          <div class="p-4 bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-darkBorder flex justify-between items-center">
-            <button onclick="changeMonth(-1)" class="px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition">❮ السابق</button>
-            <div class="text-center">
-              <h2 id="cal-month-year" class="font-bold text-lg text-zinc-800 dark:text-zinc-100"></h2>
-              <button onclick="goToCurrentMonth()" class="text-xs text-emerald-600 dark:text-emerald-400 font-bold hover:underline mt-1">العودة لليوم</button>
-            </div>
-            <button onclick="changeMonth(1)" class="px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition">التالي ❯</button>
-          </div>
-          <div class="grid grid-cols-7 text-center text-[10px] md:text-xs font-bold text-zinc-500 dark:text-zinc-400 bg-zinc-100/50 dark:bg-zinc-950 py-3">
-            <div>السبت</div><div>الأحد</div><div>الاثنين</div><div>الثلاثاء</div><div>الأربعاء</div><div>الخميس</div><div>الجمعة</div>
-          </div>
-          <div id="cal-grid" class="grid grid-cols-7 auto-rows-fr bg-zinc-200 dark:bg-zinc-800 gap-px"></div>
-        </div>
-        <div id="cal-day-details" class="mt-5 bg-white dark:bg-darkCard rounded-2xl p-5 border border-zinc-200 dark:border-darkBorder shadow-sm">
-          <h3 id="cal-selected-day-title" class="font-bold text-zinc-800 dark:text-zinc-100 text-sm mb-4">اختر يوماً لعرض محاضراته</h3>
-          <div id="cal-selected-day-lectures" class="space-y-3"></div>
-        </div>
-      </div>
+/* ---------- components ---------- */
+const empty = (k,msg) => `<div class="empty">${ic(k)}<p>${msg}</p></div>`;
+function card(i) {
+  const id=esc(i.id), st=Storage.get('status',i.id,'none');
+  const mq=Storage.get('mcq',i.id,'false')==='true', td=Storage.get('todo',i.id,'false')==='true';
+  return `<article class="lec ${st}">
+    <div class="lh"><div class="chips">
+      ${i.department?`<span class="chip dep">${esc(i.department)}</span>`:''}
+      ${i.week?`<span class="chip">الأسبوع ${esc(i.week)}</span>`:''}
+      ${dOf(i)?`<span class="chip">${ic('calendar')}${esc(dOf(i))}</span>`:''}
+    </div><button class="ib${td?' on':''}" data-a="todo" data-id="${id}" aria-pressed="${td}" title="تثبيت في المهام">${ic('pin')}</button></div>
+    <h3>${esc(i.title)}</h3>
+    <p class="doc">${ic('user')}${esc(i.doctor)}</p>
+    <div class="act">
+      <div class="seg" role="group" aria-label="حالة القراءة">${ST.map(([k,l])=>`<button class="${k===st?'on':''}" data-a="st" data-v="${k}" data-id="${id}">${l}</button>`).join('')}</div>
+      <button class="mcq${mq?' on':''}" data-a="mcq" data-id="${id}" aria-pressed="${mq}">${ic('check')}حل MCQs</button>
+    </div></article>`;
+}
+const cards = (arr,k,msg) => arr.length ? arr.map(card).join('') : empty(k,msg);
 
-    </div>
-  </main>
+/* ---------- views ---------- */
+function rList() {
+  const f=filtered(), g=$('group-by').value;
+  if (!f.length) return $('list').innerHTML = empty('search','لا توجد نتائج. جرّب تغيير البحث أو مسح الفلاتر.');
+  if (g==='none') return $('list').innerHTML = f.map(card).join('');
+  const groups = {};
+  f.forEach(i => (groups[i[g]||"غير محدد"] ||= []).push(i));
+  $('list').innerHTML = Object.keys(groups).sort().map(n =>
+    `<div><h2 class="gh">${g==='week'?'الأسبوع ':''}${esc(n)}<em>${groups[n].length}</em></h2><div class="list">${groups[n].map(card).join('')}</div></div>`).join('');
+}
+function rToday() { $('today-list').innerHTML = cards(L.filter(i=>dOf(i)===today()),'calendar','لا توجد محاضرات اليوم. استغل الوقت بمراجعة شيء متأخر.'); }
+function rTodo() { $('todo-list').innerHTML = cards(L.filter(i=>Storage.get('todo',i.id,'false')==='true'),'pin','لا توجد مهام بعد. اضغط على أيقونة التثبيت في أي محاضرة لإضافتها هنا.'); }
 
-  <!-- ================= Logic (JavaScript) ================= -->
-  <script>
-    const API_URL = "https://lectures-api.memoe3227.workers.dev/";
+function examDate(base, dept, group) {
+  if (!base) return today();
+  const off = (scheduleOffsets[group.replace(/\D/g,'')]||{})[dept] || 0;
+  const d = new Date(base); d.setDate(d.getDate()+off); return key(d);
+}
+function rExams() {
+  const grp = localStorage.getItem('user_exam_group') || 'A1';
+  const t0 = new Date(); t0.setHours(0,0,0,0);
+  const list = E.map(x => { const k=examDate(x.date,x.department,grp), d=new Date(k+'T00:00:00'); return {...x,d,diff:Math.round((d-t0)/864e5)}; })
+    .sort((a,b) => (a.diff<0)-(b.diff<0) || a.d-b.d);
+  $('exams-list').innerHTML = list.length ? list.map(x => {
+    let txt=`بعد ${x.diff} ${x.diff<=10?'أيام':'يوم'}`, cls='';
+    if (x.diff<0) txt='انتهى'; else if (x.diff===0) { txt='اليوم'; cls='hot'; } else if (x.diff<=3) cls='warn';
+    return `<div class="card ex${x.diff<0?' past':''}"><div class="dbox"><b>${x.d.getDate()}</b><span>${MONTHS[x.d.getMonth()]}</span></div>
+      <div><h3>${esc(x.title)}</h3><p>${ar(x.d,{weekday:'long'})}${x.week?` · الأسبوع ${esc(x.week)}`:''}</p></div><span class="badge ${cls}">${txt}</span></div>`;
+  }).join('') : empty('exams',`لا توجد امتحانات قادمة لكروب ${grp}.`);
+}
+function rCal() {
+  const y=cal.getFullYear(), m=cal.getMonth();
+  $('cal-title').textContent = `${MONTHS[m]} ${y}`;
+  const by = {}; filtered().forEach(i => { const d=dOf(i); if(d) (by[d] ||= []).push(i); });
+  const lead = (new Date(y,m,1).getDay()+1)%7, days = new Date(y,m+1,0).getDate(), t=today();
+  let h = '<div></div>'.repeat(lead);
+  for (let d=1; d<=days; d++) {
+    const k = `${y}-${pad(m+1)}-${pad(d)}`, ls = by[k]||[];
+    h += `<button data-a="day" data-v="${k}" class="${k===t?'td ':''}${k===selDate?'sel':''}" aria-label="${d} ${MONTHS[m]}: ${ls.length} محاضرات"><span class="n">${d}</span>
+      <span class="dots">${ls.slice(0,6).map(l=>`<i style="--c:var(--s${['none','once','twice','thrice'].indexOf(Storage.get('status',l.id,'none'))})"></i>`).join('')}</span></button>`;
+  }
+  $('cal-grid').innerHTML = h;
+  if (selDate) {
+    const ls = filtered().filter(i=>dOf(i)===selDate);
+    $('day-title').textContent = `${ar(new Date(selDate+'T00:00:00'),{weekday:'long',day:'numeric',month:'long'})} — ${ls.length} محاضرة`;
+    $('day-list').innerHTML = cards(ls,'calendar','لا توجد محاضرات في هذا اليوم.');
+  }
+}
 
-    let lecturesData = [];
-    let examsData = []; 
-    let currentView = 'list';
-    let currentCalDate = new Date();
-    let selectedDateStr = null;
-
-    const ARABIC_MONTHS = ["كانون 2", "شباط", "آذار", "نيسان", "أيار", "حزيران", "تموز", "آب", "أيلول", "تشرين 1", "تشرين 2", "كانون 1"];
-
-    // خريطة إزاحة الأيام لكل مادة حسب الكروب
-    const scheduleOffsets = {
-      "1": { "Internal Medicine": 0, "باطنية": 0, "Forensic": 1, "عدلي": 1, "Community": 2, "مجتمع": 2, "Obstetrics": 3, "توليد": 3, "Surgery": 4, "جراحة": 4 },
-      "2": { "Surgery": 0, "جراحة": 0, "Internal Medicine": 1, "باطنية": 1, "Forensic": 2, "عدلي": 2, "Community": 3, "مجتمع": 3, "Obstetrics": 4, "توليد": 4 },
-      "3": { "Obstetrics": 0, "توليد": 0, "Surgery": 1, "جراحة": 1, "Internal Medicine": 2, "باطنية": 2, "Forensic": 3, "عدلي": 3, "Community": 4, "مجتمع": 4 },
-      "4": { "Community": 0, "مجتمع": 0, "Obstetrics": 1, "توليد": 1, "Surgery": 2, "جراحة": 2, "Internal Medicine": 3, "باطنية": 3, "Forensic": 4, "عدلي": 4 },
-      "5": { "Forensic": 0, "عدلي": 0, "Community": 1, "مجتمع": 1, "Obstetrics": 2, "توليد": 2, "Surgery": 3, "جراحة": 3, "Internal Medicine": 4, "باطنية": 4 }
-    };
-
-    const Storage = {
-      get: (key, id, def) => localStorage.getItem(`${key}_${id}`) || def,
-      set: (key, id, val) => localStorage.setItem(`${key}_${id}`, val),
-      toggle: (key, id) => {
-        const current = Storage.get(key, id, 'false') === 'true';
-        Storage.set(key, id, current ? 'false' : 'true');
-        return !current;
-      }
-    };
-
-    function toggleDarkMode() {
-      const html = document.documentElement;
-      const isDark = html.classList.toggle('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      document.getElementById('theme-icon').innerText = isDark ? '☀️' : '🌙';
-    }
-    
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById('theme-icon').innerText = document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      document.getElementById('today-date-text').innerText = new Date().toLocaleDateString('ar-IQ', options);
-      
-      const savedGroup = localStorage.getItem('user_exam_group') || 'A1';
-      document.getElementById('user-group-select').value = savedGroup;
-    });
-
-    function getTodayStr() {
-      const now = new Date();
-      const y = now.getFullYear();
-      const m = String(now.getMonth() + 1).padStart(2, '0');
-      const d = String(now.getDate()).padStart(2, '0');
-      return `${y}-${m}-${d}`;
-    }
-
- async function loadLectures() {
-      try {
-        // ضفنا (?nocache=...) و (cache: "no-store") حتى نجبر المتصفح يسحب تحديثات الامتحانات فوراً
-        const res = await fetch(API_URL + "?nocache=" + new Date().getTime(), { cache: "no-store" });
-        const data = await res.json();
-        
-        // استلام البيانات بصيغتها النهائية من الـ Worker 
-        if (data && data.lectures) {
-            lecturesData = data.lectures;
-            examsData = data.exams || [];
-        } else if (Array.isArray(data)) {
-            // كود احتياطي
-            lecturesData = data;
-        }
-
-        document.getElementById('loading').classList.add('hidden');
-        document.getElementById('app-content').classList.remove('hidden');
-
-        setupFilterOptions();
-        renderAllViews();
-      } catch (err) {
-        document.getElementById('loading').innerHTML = `<div class="text-red-500 font-bold">تعذر الاتصال بقاعدة البيانات.</div>`;
-      }
-    }
-
-    function setupFilterOptions() {
-      const depts = new Set(), docs = new Set(), weeks = new Set();
-      lecturesData.forEach(i => {
-        if (i.department && i.department !== "عام") depts.add(i.department);
-        if (i.doctor && i.doctor !== "غير محدد") docs.add(i.doctor);
-        if (i.week) weeks.add(String(i.week));
-      });
-
-      const fill = (id, set, label) => {
-        const el = document.getElementById(id);
-        el.innerHTML = `<option value="all">كل ${label}</option>`;
-        Array.from(set).sort().forEach(v => el.innerHTML += `<option value="${v}">${v}</option>`);
-      };
-
-      fill('filter-dept', depts, 'الأقسام');
-      fill('filter-doc', docs, 'الدكاترة');
-      fill('filter-week', weeks, 'الأسابيع');
-
-      ['search-input', 'filter-dept', 'filter-doc', 'filter-week', 'filter-status', 'group-by'].forEach(id => {
-        document.getElementById(id).addEventListener(id === 'search-input' ? 'input' : 'change', renderAllViews);
-      });
-    }
-
-    function changeStatus(id, val) { Storage.set('status', id, val); renderAllViews(); }
-    function toggleMCQ(id) { Storage.toggle('mcq', id); renderAllViews(); }
-    function toggleToDo(id) { Storage.toggle('todo', id); renderAllViews(); }
-
-    function renderAllViews() {
-      if (currentView === 'today') renderTodayView();
-      if (currentView === 'list') renderListView();
-      if (currentView === 'todo') renderToDoView();
-      if (currentView === 'exams') renderExamsView();
-      if (currentView === 'calendar') { renderCalendar(); if (selectedDateStr) renderDayDetails(selectedDateStr); }
-      updateStats();
-    }
-
-    function generateCardHTML(item) {
-      const st = Storage.get('status', item.id, 'none');
-      const isMCQ = Storage.get('mcq', item.id, 'false') === 'true';
-      const isToDo = Storage.get('todo', item.id, 'false') === 'true';
-
-      let bg = "bg-white dark:bg-darkCard border-zinc-200 dark:border-darkBorder";
-      let selectStyle = "bg-zinc-50 dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700";
-      
-      if (st === 'once') { 
-        bg = "bg-emerald-50/50 dark:bg-zinc-900 border-emerald-200 dark:border-emerald-900/50"; 
-        selectStyle = "bg-emerald-50 dark:bg-zinc-800 text-emerald-800 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50"; 
-      }
-      if (st === 'twice') { 
-        bg = "bg-emerald-100/50 dark:bg-zinc-800 border-emerald-300 dark:border-emerald-800"; 
-        selectStyle = "bg-emerald-100 dark:bg-zinc-800 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 font-medium"; 
-      }
-      if (st === 'thrice') { 
-        bg = "bg-emerald-100 dark:bg-zinc-800 border-emerald-400 dark:border-emerald-500/80 shadow-sm shadow-emerald-100 dark:shadow-none"; 
-        selectStyle = "bg-emerald-200 dark:bg-emerald-950 text-emerald-900 dark:text-emerald-200 border-emerald-400 dark:border-emerald-500 font-bold"; 
-      }
-
-      return `
-        <div class="p-5 rounded-2xl border ${bg} transition-colors animate-pop">
-          <div class="flex justify-between items-start mb-3">
-            <div class="flex flex-wrap gap-2">
-              <span class="text-[10px] font-bold px-2 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700">${item.department}</span>
-              ${item.week ? `<span class="text-[10px] font-bold px-2 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700">W${item.week}</span>` : ''}
-              <span class="text-[10px] font-medium px-2 py-1 text-zinc-500 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700 rounded-md">📅 ${item.date || 'لا يوجد'}</span>
-            </div>
-            <button onclick="toggleToDo('${item.id}')" class="text-xl transition hover:scale-110" title="إضافة/إزالة من المهام">
-              ${isToDo ? '📌' : '<span class="opacity-30 grayscale filter">📌</span>'}
-            </button>
-          </div>
-          
-          <h3 class="font-bold text-lg text-zinc-900 dark:text-zinc-100 mb-1 leading-snug">${item.title}</h3>
-          <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-5 font-medium">👨‍⚕️ ${item.doctor}</p>
-
-          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t border-zinc-100 dark:border-zinc-700/50">
-            <select onchange="changeStatus('${item.id}', this.value)" class="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs focus:outline-none cursor-pointer border ${selectStyle}">
-              <option value="none" ${st === 'none' ? 'selected' : ''}>❌ ما قاريها</option>
-              <option value="once" ${st === 'once' ? 'selected' : ''}>📖 قاريها مرة</option>
-              <option value="twice" ${st === 'twice' ? 'selected' : ''}>⭐ قاريها مرتين</option>
-              <option value="thrice" ${st === 'thrice' ? 'selected' : ''}>🔥 قاريها 3 مرات</option>
-            </select>
-
-            <label class="flex items-center gap-2 cursor-pointer bg-zinc-50 dark:bg-zinc-950 px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition select-none">
-              <input type="checkbox" onchange="toggleMCQ('${item.id}')" ${isMCQ ? 'checked' : ''} class="w-4 h-4 text-emerald-500 rounded focus:ring-emerald-500 dark:bg-zinc-800 dark:border-zinc-600 accent-emerald-500 cursor-pointer">
-              <span class="text-xs font-bold ${isMCQ ? 'text-emerald-600 dark:text-emerald-400' : 'text-zinc-600 dark:text-zinc-400'}">حل MCQs 📝</span>
-            </label>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderTodayView() {
-      const container = document.getElementById('today-container');
-      const todayStr = getTodayStr();
-      const todayLectures = lecturesData.filter(i => (i.date || '').split('T')[0] === todayStr);
-
-      container.innerHTML = "";
-      if (todayLectures.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-12 border-2 border-dashed border-zinc-200 dark:border-darkBorder rounded-2xl bg-white dark:bg-darkCard">
-            <span class="text-5xl">🎉</span>
-            <p class="mt-4 text-sm text-zinc-500 dark:text-zinc-400 font-bold">عطلة سعيدة!<br>لا توجد محاضرات مسجلة بتاريخ اليوم.</p>
-          </div>`;
-        return;
-      }
-      todayLectures.forEach(item => container.innerHTML += generateCardHTML(item));
-    }
-
-    function getFilteredLectures() {
-      const q = document.getElementById('search-input').value.toLowerCase();
-      const dep = document.getElementById('filter-dept').value;
-      const doc = document.getElementById('filter-doc').value;
-      const w = document.getElementById('filter-week').value;
-      const st = document.getElementById('filter-status').value;
-
-      return lecturesData.filter(i => {
-        const m1 = (i.title||"").toLowerCase().includes(q) || (i.department||"").toLowerCase().includes(q) || (i.doctor||"").toLowerCase().includes(q);
-        const m2 = dep === 'all' || i.department === dep;
-        const m3 = doc === 'all' || i.doctor === doc;
-        const m4 = w === 'all' || String(i.week) === w;
-        const m5 = st === 'all' || Storage.get('status', i.id, 'none') === st;
-        return m1 && m2 && m3 && m4 && m5;
-      });
-    }
-
-    function renderListView() {
-      const container = document.getElementById('view-list');
-      const filtered = getFilteredLectures();
-      const groupBy = document.getElementById('group-by').value;
-      
-      container.innerHTML = "";
-      if (filtered.length === 0) {
-        container.innerHTML = `<div class="text-center py-12 bg-white dark:bg-darkCard border border-zinc-200 dark:border-darkBorder rounded-2xl text-zinc-500 dark:text-zinc-400 font-bold">لا توجد نتائج تطابق البحث.</div>`;
-        return;
-      }
-
-      if (groupBy === 'none') {
-        filtered.forEach(item => container.innerHTML += generateCardHTML(item));
-      } else {
-        const groups = {};
-        filtered.forEach(item => {
-          let key = item[groupBy];
-          if (!key) key = "غير محدد";
-          if (!groups[key]) groups[key] = [];
-          groups[key].push(item);
-        });
-
-        Object.keys(groups).sort().forEach(groupName => {
-          let groupTitle = groupBy === 'doctor' ? `👨‍⚕️ ${groupName}` : groupBy === 'week' ? `📅 الأسبوع ${groupName}` : `📚 ${groupName}`;
-          let html = `
-            <div class="mb-8">
-              <h2 class="text-sm font-bold text-zinc-400 dark:text-zinc-500 mb-4 flex items-center gap-3">
-                <span class="h-px bg-zinc-200 dark:bg-zinc-800 flex-1"></span>
-                ${groupTitle} <span class="bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-2.5 py-1 rounded-full text-[10px]">${groups[groupName].length}</span>
-                <span class="h-px bg-zinc-200 dark:bg-zinc-800 flex-1"></span>
-              </h2>
-              <div class="space-y-4">
-          `;
-          groups[groupName].forEach(item => html += generateCardHTML(item));
-          html += `</div></div>`;
-          container.innerHTML += html;
-        });
-      }
-    }
-
-    function renderToDoView() {
-      const container = document.getElementById('todo-container');
-      const todos = lecturesData.filter(i => Storage.get('todo', i.id, 'false') === 'true');
-      
-      container.innerHTML = "";
-      if (todos.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-12 border-2 border-dashed border-zinc-200 dark:border-darkBorder rounded-2xl bg-white dark:bg-darkCard">
-            <span class="text-4xl opacity-50 grayscale">📌</span>
-            <p class="mt-4 text-sm text-zinc-500 dark:text-zinc-400 font-bold">قائمة المهام فارغة.<br>اضغط على أيقونة الدبوس في أي محاضرة لإضافتها هنا.</p>
-          </div>`;
-        return;
-      }
-      todos.forEach(item => container.innerHTML += generateCardHTML(item));
-    }
-
-    function calculateExactExamDate(baseDateStr, department, groupName) {
-      if (!baseDateStr) return new Date().toISOString().split('T')[0];
-      
-      const groupNum = groupName.replace(/\D/g, ''); 
-      let offset = 0;
-      if (scheduleOffsets[groupNum] && scheduleOffsets[groupNum][department]) {
-        offset = scheduleOffsets[groupNum][department];
-      }
-
-      const exactDate = new Date(baseDateStr);
-      exactDate.setDate(exactDate.getDate() + offset);
-      
-      const y = exactDate.getFullYear();
-      const m = String(exactDate.getMonth() + 1).padStart(2, '0');
-      const d = String(exactDate.getDate()).padStart(2, '0');
-      return `${y}-${m}-${d}`;
-    }
-
-    function updateGroupAndRender() {
-      const selectedGroup = document.getElementById('user-group-select').value;
-      localStorage.setItem('user_exam_group', selectedGroup);
-      renderExamsView();
-    }
-
-    function renderExamsView() {
-      const container = document.getElementById('exams-container');
-      const userGroup = localStorage.getItem('user_exam_group') || 'A1';
-      
-      const myExams = examsData.map(exam => {
-        const exactDateStr = calculateExactExamDate(exam.date, exam.department, userGroup);
-        return { ...exam, exactDateStr: exactDateStr };
-      });
-      
-      myExams.sort((a, b) => new Date(a.exactDateStr) - new Date(b.exactDateStr));
-
-      container.innerHTML = "";
-      if (myExams.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-12 border-2 border-dashed border-zinc-200 dark:border-darkBorder rounded-2xl bg-white dark:bg-darkCard">
-            <span class="text-4xl">😌</span>
-            <p class="mt-4 text-sm text-zinc-500 dark:text-zinc-400 font-bold">لا توجد امتحانات قادمة لكروب ${userGroup}.</p>
-          </div>`;
-        return;
-      }
-
-      const today = new Date();
-      today.setHours(0,0,0,0);
-
-      myExams.forEach(exam => {
-        const examDate = new Date(exam.exactDateStr);
-        examDate.setHours(0,0,0,0);
-        
-        const diffTime = examDate - today;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
-        let daysText = "";
-        let colorClass = "bg-white dark:bg-darkCard border-zinc-200 dark:border-darkBorder";
-        let badgeClass = "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300";
-
-        if (diffDays < 0) {
-          daysText = "انتهى";
-          colorClass = "bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 opacity-60";
-        } else if (diffDays === 0) {
-          daysText = "اليوم!";
-          colorClass = "bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-900/50";
-          badgeClass = "bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-400";
-        } else if (diffDays <= 3) {
-          daysText = `بعد ${diffDays} أيام`;
-          colorClass = "bg-orange-50 dark:bg-orange-900/10 border-orange-200 dark:border-orange-900/50";
-          badgeClass = "bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-400";
-        } else {
-          daysText = `بعد ${diffDays} يوم`;
-        }
-
-        const displayOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const displayDate = examDate.toLocaleDateString('ar-IQ', displayOptions);
-
-        container.innerHTML += `
-          <div class="p-5 rounded-2xl border ${colorClass} flex items-center justify-between shadow-sm transition-all animate-pop">
-            <div>
-              <h3 class="font-bold text-lg text-zinc-900 dark:text-zinc-100 mb-1">${exam.title}</h3>
-              <p class="text-xs text-zinc-500 dark:text-zinc-400 font-medium flex items-center gap-1">
-                <span>📅 ${displayDate}</span>
-                ${exam.week ? `<span class="px-1.5 py-0.5 bg-zinc-200/50 dark:bg-zinc-800 rounded text-[10px] ml-1">W${exam.week}</span>` : ''}
-              </p>
-            </div>
-            <div class="px-4 py-2 rounded-xl text-sm font-bold ${badgeClass}">
-              ${daysText}
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function renderCalendar() {
-      const year = currentCalDate.getFullYear();
-      const month = currentCalDate.getMonth();
-      document.getElementById('cal-month-year').innerText = `${ARABIC_MONTHS[month]} ${year}`;
-      
-      const grid = document.getElementById('cal-grid');
-      grid.innerHTML = "";
-      
-      const firstDay = new Date(year, month, 1).getDay();
-      const totalDays = new Date(year, month + 1, 0).getDate();
-      const startDayIndex = (firstDay + 1) % 7;
-      
-      const lecturesByDate = {};
-      getFilteredLectures().forEach(item => {
-        if (!item.date) return;
-        const d = item.date.split('T')[0];
-        if (!lecturesByDate[d]) lecturesByDate[d] = [];
-        lecturesByDate[d].push(item);
-      });
-
-      for (let i = 0; i < startDayIndex; i++) grid.innerHTML += `<div class="bg-zinc-50 dark:bg-zinc-900 min-h-[70px]"></div>`;
-
-      const todayStr = getTodayStr();
-
-      for (let day = 1; day <= totalDays; day++) {
-        const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const dayLecs = lecturesByDate[dateKey] || [];
-        const isToday = (dateKey === todayStr);
-        const isSel = (dateKey === selectedDateStr);
-
-        let classes = "bg-white dark:bg-darkCard min-h-[70px] p-2 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800 transition flex flex-col justify-between";
-        if (isSel) classes += " ring-2 ring-emerald-500 z-10";
-
-        let dots = "";
-        dayLecs.slice(0, 4).forEach(lec => {
-          const st = Storage.get('status', lec.id, 'none');
-          let c = "bg-zinc-300 dark:bg-zinc-600";
-          if (st === 'once') c = "bg-emerald-300 dark:bg-emerald-700";
-          if (st === 'twice') c = "bg-emerald-400 dark:bg-emerald-500";
-          if (st === 'thrice') c = "bg-emerald-500 dark:bg-emerald-400";
-          dots += `<div class="w-1.5 h-1.5 rounded-full ${c}"></div>`;
-        });
-
-        const cell = document.createElement('div');
-        cell.className = classes;
-        cell.onclick = () => { selectedDateStr = dateKey; renderCalendar(); renderDayDetails(dateKey); };
-        cell.innerHTML = `
-          <div class="flex justify-between items-start">
-            <span class="text-xs font-bold ${isToday ? 'w-6 h-6 bg-emerald-600 text-white rounded-full flex items-center justify-center' : 'text-zinc-700 dark:text-zinc-300'}">${day}</span>
-          </div>
-          <div class="flex gap-1 mt-1 flex-wrap">${dots}</div>
-        `;
-        grid.appendChild(cell);
-      }
-    }
-
-    function renderDayDetails(dateKey) {
-      const container = document.getElementById('cal-selected-day-lectures');
-      const filtered = getFilteredLectures().filter(i => (i.date||'').split('T')[0] === dateKey);
-      
-      document.getElementById('cal-selected-day-title').innerText = `محاضرات (${dateKey}): ${filtered.length}`;
-      container.innerHTML = "";
-      
-      if (filtered.length === 0) {
-        container.innerHTML = `<p class="text-sm text-zinc-500 dark:text-zinc-400 text-center py-4">لا توجد محاضرات في هذا اليوم.</p>`;
-        return;
-      }
-      filtered.forEach(item => container.innerHTML += generateCardHTML(item));
-    }
-
-    function changeMonth(d) { currentCalDate.setMonth(currentCalDate.getMonth() + d); renderCalendar(); }
-    function goToCurrentMonth() { currentCalDate = new Date(); selectedDateStr = getTodayStr(); renderCalendar(); renderDayDetails(selectedDateStr); }
-
-    function updateStats() {
-      let total = lecturesData.length, none = 0, once = 0, twice = 0, thrice = 0, mcq = 0, todo = 0;
-      
-      const todayStr = getTodayStr();
-      let todayCount = 0;
-
-      lecturesData.forEach(i => {
-        const st = Storage.get('status', i.id, 'none');
-        if (st === 'once') once++; else if (st === 'twice') twice++; else if (st === 'thrice') thrice++; else none++;
-        if (Storage.get('mcq', i.id, 'false') === 'true') mcq++;
-        if (Storage.get('todo', i.id, 'false') === 'true') todo++;
-        if ((i.date || '').split('T')[0] === todayStr) todayCount++;
-      });
-
-      document.getElementById('stat-total').innerText = total;
-      document.getElementById('stat-once').innerText = once;
-      document.getElementById('stat-twice').innerText = twice;
-      document.getElementById('stat-thrice').innerText = thrice;
-      document.getElementById('stat-mcq').innerText = mcq;
-      document.getElementById('todo-count').innerText = todo;
-      document.getElementById('today-count').innerText = todayCount;
-
-      const pts = (once * 0.33) + (twice * 0.66) + (thrice * 1.0);
-      const pct = total > 0 ? Math.min(100, Math.round((pts / total) * 100)) : 0;
-      
-      document.getElementById('progress-bar-fill').style.width = pct + "%";
-      document.getElementById('progress-text').innerText = `نسبة الإنجاز: ${pct}%`;
-    }
-
-    function switchView(v) {
-      currentView = v;
-      const actClass = "flex-1 px-3 py-2.5 rounded-lg transition bg-white dark:bg-zinc-800 text-emerald-900 dark:text-emerald-400 shadow font-bold";
-      const defClass = "flex-1 px-3 py-2.5 rounded-lg transition text-zinc-200 hover:text-white font-medium";
-      
-      document.getElementById('tab-today-btn').className = v === 'today' ? actClass : defClass;
-      document.getElementById('tab-list-btn').className = v === 'list' ? actClass : defClass;
-      document.getElementById('tab-todo-btn').className = v === 'todo' ? actClass : defClass;
-      document.getElementById('tab-exams-btn').className = v === 'exams' ? actClass : defClass;
-      document.getElementById('tab-cal-btn').className = v === 'calendar' ? actClass : defClass;
-      
-      document.getElementById('view-today').classList.toggle('hidden', v !== 'today');
-      document.getElementById('view-list').classList.toggle('hidden', v !== 'list');
-      document.getElementById('view-todo').classList.toggle('hidden', v !== 'todo');
-      document.getElementById('view-exams').classList.toggle('hidden', v !== 'exams');
-      document.getElementById('view-calendar').classList.toggle('hidden', v !== 'calendar');
-      
-      document.getElementById('filters-container').classList.toggle('hidden', v === 'todo' || v === 'today' || v === 'exams');
-
-      renderAllViews();
-    }
-
-    loadLectures();
-  </script>
+function stats() {
+  let once=0,twice=0,thrice=0,mcq=0,todo=0,tc=0; const t=today();
+  L.forEach(i => {
+    const s=Storage.get('status',i.id,'none');
+    if(s==='once')once++; else if(s==='twice')twice++; else if(s==='thrice')thrice++;
+    if(Storage.get('mcq',i.id,'false')==='true')mcq++;
+    if(Storage.get('todo',i.id,'false')==='true')todo++;
+    if(dOf(i)===t)tc++;
+  });
+  const total=L.length, none=total-once-twice-thrice;
+  const pct = total ? Math.min(100,Math.round((once*.33+twice*.66+thrice)/total*100)) : 0;
+  $('pct').textContent = pct+'%'; $('ringfg').setAttribute('stroke-dasharray',`${pct} 100`);
+  $('sub').textContent = `${total-none} من ${total} محاضرة تمت قراءتها`;
+  const pill = (c,l,n) => `<span><i style="--c:${c}"></i>${l} <b>${n}</b></span>`;
+  $('pills').innerHTML = pill('var(--s0)','لم تُقرأ',none)+pill('var(--s1)','مرة',once)+pill('var(--s2)','مرتين',twice)+pill('var(--s3)','3 مرات',thrice)+pill('var(--pr)','MCQs',mcq);
+  $('n-today').textContent = tc||''; $('n-todo').textContent = todo||'';
+  const n = ['filter-dept','filter-doc','filter-week','filter-status'].filter(i=>$(i).value!=='all').length + ($('group-by').value!=='none');
+  $('fbadge').textContent = n||'';
+}
+function render() { ({today:rToday,list:rList,todo:rTodo,exams:rExams,calendar:rCal})[view](); stats(); }
+function go(v) {
+  view = v;
+  TABS.forEach(([k]) => { $('t-'+k).classList.toggle('on',k===v); $('v-'+k).hidden = k!==v; });
+  $('filters').hidden = !(v==='list'||v==='calendar');
+  $('dash').hidden = v==='exams'||v==='calendar';
+  scrollTo({top:0}); render();
+}
+load();
+</script>
 </body>
 </html>
