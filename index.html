@@ -11,7 +11,12 @@
       darkMode: 'class',
       theme: {
         extend: {
-          colors: { darkBg: '#0f172a', darkCard: '#1e293b', darkBorder: '#334155' }
+          colors: { 
+            darkBg: '#09090b',    /* Zinc 950 - Almost Black */
+            darkCard: '#18181b',  /* Zinc 900 */
+            darkBorder: '#27272a',/* Zinc 800 */
+            brandGreen: '#10b981' /* Emerald 500 */
+          }
         }
       }
     }
@@ -25,96 +30,99 @@
     }
   </script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Cairo', sans-serif; transition: background-color 0.3s, color 0.3s; }
+    body { font-family: 'Tajawal', sans-serif; transition: background-color 0.3s, color 0.3s; }
     .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 4px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #3f3f46; }
     @keyframes pop { 0% { transform: scale(0.95); } 100% { transform: scale(1); } }
     .animate-pop { animation: pop 0.2s ease-out; }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-darkBg dark:text-slate-200 min-h-screen pb-20 selection:bg-indigo-500 selection:text-white">
+<body class="bg-zinc-50 text-zinc-900 dark:bg-darkBg dark:text-zinc-200 min-h-screen pb-20 selection:bg-brandGreen selection:text-white">
 
   <!-- ================= Header & Stats ================= -->
-  <header class="bg-gradient-to-r from-indigo-700 via-indigo-600 to-violet-700 dark:from-slate-900 dark:via-indigo-950 dark:to-slate-900 text-white shadow-xl sticky top-0 z-40 transition-colors duration-300">
+  <header class="bg-gradient-to-r from-emerald-600 to-teal-700 dark:from-darkCard dark:to-darkBg dark:border-b dark:border-darkBorder text-white shadow-lg sticky top-0 z-40 transition-colors duration-300">
     <div class="max-w-5xl mx-auto px-4 py-4">
       
-      <div class="flex items-center justify-between mb-3">
-        <div class="flex items-center gap-2.5">
-          <div class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur flex items-center justify-center text-xl shadow-inner border border-white/20">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl bg-white/10 dark:bg-zinc-800 backdrop-blur flex items-center justify-center text-2xl shadow-inner border border-white/20 dark:border-zinc-700">
             🎓
           </div>
           <div>
-            <h1 class="text-lg md:text-xl font-bold tracking-tight">منصة المحاضرات والمهام</h1>
+            <h1 class="text-xl md:text-2xl font-bold tracking-tight dark:text-zinc-100">منصة المحاضرات</h1>
           </div>
         </div>
-        <button onclick="toggleDarkMode()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 transition text-lg" title="تغيير المظهر">
+        <button onclick="toggleDarkMode()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-white/20 dark:border-zinc-700 transition text-lg" title="تغيير المظهر">
           <span id="theme-icon">🌙</span>
         </button>
       </div>
 
-      <!-- أزرار التبويبات الأربعة (تمت إضافة "اليوم") -->
-      <div class="flex gap-1 bg-indigo-900/60 dark:bg-black/40 p-1 rounded-xl border border-white/10 text-[11px] md:text-xs font-bold mb-3 overflow-x-auto custom-scrollbar">
-        <button id="tab-today-btn" onclick="switchView('today')" class="flex-1 px-3 py-2 rounded-lg transition text-indigo-200 hover:text-white min-w-[70px]">
+      <!-- أزرار التبويبات -->
+      <div class="flex gap-1.5 bg-black/20 dark:bg-black/40 p-1.5 rounded-xl border border-white/10 dark:border-zinc-800 text-[11px] md:text-xs font-bold mb-4 overflow-x-auto custom-scrollbar">
+        <button id="tab-today-btn" onclick="switchView('today')" class="flex-1 px-3 py-2.5 rounded-lg transition text-zinc-200 hover:text-white min-w-[70px]">
           ⚡ اليوم (<span id="today-count">0</span>)
         </button>
-        <button id="tab-list-btn" onclick="switchView('list')" class="flex-1 px-3 py-2 rounded-lg transition bg-white text-indigo-900 shadow min-w-[70px]">
+        <button id="tab-list-btn" onclick="switchView('list')" class="flex-1 px-3 py-2.5 rounded-lg transition bg-white text-emerald-900 shadow min-w-[70px]">
           📋 القائمة
         </button>
-        <button id="tab-todo-btn" onclick="switchView('todo')" class="flex-1 px-3 py-2 rounded-lg transition text-indigo-200 hover:text-white min-w-[70px]">
+        <button id="tab-todo-btn" onclick="switchView('todo')" class="flex-1 px-3 py-2.5 rounded-lg transition text-zinc-200 hover:text-white min-w-[70px]">
           📌 المهام (<span id="todo-count">0</span>)
         </button>
-        <button id="tab-cal-btn" onclick="switchView('calendar')" class="flex-1 px-3 py-2 rounded-lg transition text-indigo-200 hover:text-white min-w-[70px]">
+        <button id="tab-exams-btn" onclick="switchView('exams')" class="flex-1 px-3 py-2.5 rounded-lg transition text-zinc-200 hover:text-white min-w-[70px]">
+          📝 الامتحانات
+        </button>
+        <button id="tab-cal-btn" onclick="switchView('calendar')" class="flex-1 px-3 py-2.5 rounded-lg transition text-zinc-200 hover:text-white min-w-[70px]">
           📅 التقويم
         </button>
       </div>
 
       <!-- شريط التقدم والإحصائيات -->
-      <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/15 shadow-inner">
-        <div class="flex items-center justify-between text-xs mb-1.5 font-bold">
+      <div class="bg-white/10 dark:bg-zinc-800/50 backdrop-blur-md rounded-2xl p-4 border border-white/15 dark:border-zinc-700/50 shadow-inner">
+        <div class="flex items-center justify-between text-xs mb-2 font-bold dark:text-zinc-300">
           <span id="progress-text">نسبة الإنجاز: 0%</span>
-          <span id="motivational-quote" class="text-indigo-200 hidden sm:inline">أبطال الدفعة! 🚀</span>
+          <span class="text-emerald-100 dark:text-emerald-400 hidden sm:inline">أبطال الدفعة! 🚀</span>
         </div>
-        <div class="w-full bg-black/30 rounded-full h-2.5 overflow-hidden p-0.5">
-          <div id="progress-bar-fill" class="bg-gradient-to-r from-amber-400 via-emerald-400 to-cyan-400 h-full rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
+        <div class="w-full bg-black/30 dark:bg-zinc-950 rounded-full h-3 overflow-hidden p-0.5">
+          <div id="progress-bar-fill" class="bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500 dark:from-emerald-700 dark:via-emerald-500 dark:to-emerald-400 h-full rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
         </div>
 
-        <div class="flex justify-between mt-3 pt-2 border-t border-white/10 text-center text-[10px] sm:text-xs font-bold">
-          <div><span class="text-indigo-200 block text-[9px] font-normal">المجموع</span><span id="stat-total" class="text-sm">0</span></div>
-          <div><span class="text-amber-200 block text-[9px] font-normal">قراءة 1</span><span id="stat-once" class="text-amber-300 text-sm">0</span></div>
-          <div><span class="text-emerald-200 block text-[9px] font-normal">قراءة 2</span><span id="stat-twice" class="text-emerald-300 text-sm">0</span></div>
-          <div><span class="text-cyan-200 block text-[9px] font-normal">قراءة 3</span><span id="stat-thrice" class="text-cyan-300 text-sm">0</span></div>
-          <div class="border-r border-white/20 pr-2"><span class="text-rose-200 block text-[9px] font-normal">MCQs</span><span id="stat-mcq" class="text-rose-300 text-sm">0</span></div>
+        <div class="flex justify-between mt-4 pt-3 border-t border-white/10 dark:border-zinc-700/50 text-center text-[10px] sm:text-xs font-bold">
+          <div><span class="text-zinc-200 dark:text-zinc-400 block text-[9px] font-normal mb-0.5">المجموع</span><span id="stat-total" class="text-sm dark:text-zinc-200">0</span></div>
+          <div><span class="text-zinc-200 dark:text-zinc-400 block text-[9px] font-normal mb-0.5">قراءة 1</span><span id="stat-once" class="text-emerald-300 dark:text-emerald-400 text-sm">0</span></div>
+          <div><span class="text-zinc-200 dark:text-zinc-400 block text-[9px] font-normal mb-0.5">قراءة 2</span><span id="stat-twice" class="text-emerald-300 dark:text-emerald-400 text-sm">0</span></div>
+          <div><span class="text-zinc-200 dark:text-zinc-400 block text-[9px] font-normal mb-0.5">قراءة 3</span><span id="stat-thrice" class="text-emerald-300 dark:text-emerald-400 text-sm">0</span></div>
+          <div class="border-r border-white/20 dark:border-zinc-600/50 pr-3"><span class="text-zinc-200 dark:text-zinc-400 block text-[9px] font-normal mb-0.5">MCQs</span><span id="stat-mcq" class="text-emerald-300 dark:text-emerald-400 text-sm">0</span></div>
         </div>
       </div>
     </div>
   </header>
 
   <!-- ================= المحتوى الرئيسي ================= -->
-  <main class="max-w-5xl mx-auto px-4 mt-5">
+  <main class="max-w-5xl mx-auto px-4 mt-6">
 
     <div id="loading" class="text-center py-16">
-      <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-indigo-600 border-t-transparent mb-3"></div>
-      <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">جاري سحب المحاضرات من قاعدة البيانات...</p>
+      <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-emerald-500 border-t-transparent mb-3"></div>
+      <p class="text-sm font-semibold text-zinc-500 dark:text-zinc-400">جاري سحب البيانات...</p>
     </div>
 
     <div id="app-content" class="hidden">
 
       <!-- ================= شريط الفلاتر والبحث ================= -->
-      <div id="filters-container" class="bg-white dark:bg-darkCard rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-darkBorder mb-5 transition-colors">
+      <div id="filters-container" class="bg-white dark:bg-darkCard rounded-2xl p-5 shadow-sm border border-zinc-200 dark:border-darkBorder mb-6 transition-colors">
         
-        <div class="relative mb-3">
+        <div class="relative mb-4">
           <input type="text" id="search-input" placeholder="ابحث باسم المحاضرة، الدكتور، أو القسم..." 
-                 class="w-full pr-10 pl-4 py-2.5 rounded-xl border border-slate-200 dark:border-darkBorder bg-slate-50 dark:bg-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors">
-          <span class="absolute right-3 top-2.5 text-slate-400">🔍</span>
+                 class="w-full pr-10 pl-4 py-3 rounded-xl border border-zinc-200 dark:border-darkBorder bg-zinc-50 dark:bg-zinc-950 dark:text-zinc-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors placeholder-zinc-400 dark:placeholder-zinc-600">
+          <span class="absolute right-3 top-3.5 text-zinc-400 dark:text-zinc-500">🔍</span>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-2 text-xs">
-          <div class="col-span-2 md:col-span-1 border-l-0 md:border-l border-slate-200 dark:border-darkBorder md:pl-2">
-            <label class="block font-bold text-indigo-600 dark:text-indigo-400 mb-1">تجميع حسب:</label>
-            <select id="group-by" class="w-full p-2 rounded-xl border border-slate-200 dark:border-darkBorder bg-slate-50 dark:bg-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-xs">
+          <div class="col-span-2 md:col-span-1 border-l-0 md:border-l border-zinc-200 dark:border-darkBorder md:pl-3">
+            <label class="block font-bold text-emerald-700 dark:text-emerald-500 mb-1.5">تجميع حسب:</label>
+            <select id="group-by" class="w-full p-2.5 rounded-xl border border-zinc-200 dark:border-darkBorder bg-zinc-50 dark:bg-zinc-950 dark:text-zinc-200 focus:ring-2 focus:ring-emerald-500 outline-none">
               <option value="none">بدون تجميع (قائمة)</option>
               <option value="department">القسم / المادة</option>
               <option value="doctor">اسم الدكتور</option>
@@ -122,20 +130,20 @@
             </select>
           </div>
           <div>
-            <label class="block font-bold text-slate-500 dark:text-slate-400 mb-1">المادة:</label>
-            <select id="filter-dept" class="w-full p-2 rounded-xl border border-slate-200 dark:border-darkBorder bg-slate-50 dark:bg-slate-900 dark:text-white"></select>
+            <label class="block font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">المادة:</label>
+            <select id="filter-dept" class="w-full p-2.5 rounded-xl border border-zinc-200 dark:border-darkBorder bg-zinc-50 dark:bg-zinc-950 dark:text-zinc-200 outline-none focus:ring-2 focus:ring-emerald-500"></select>
           </div>
           <div>
-            <label class="block font-bold text-slate-500 dark:text-slate-400 mb-1">الدكتور:</label>
-            <select id="filter-doc" class="w-full p-2 rounded-xl border border-slate-200 dark:border-darkBorder bg-slate-50 dark:bg-slate-900 dark:text-white"></select>
+            <label class="block font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">الدكتور:</label>
+            <select id="filter-doc" class="w-full p-2.5 rounded-xl border border-zinc-200 dark:border-darkBorder bg-zinc-50 dark:bg-zinc-950 dark:text-zinc-200 outline-none focus:ring-2 focus:ring-emerald-500"></select>
           </div>
           <div>
-            <label class="block font-bold text-slate-500 dark:text-slate-400 mb-1">الأسبوع:</label>
-            <select id="filter-week" class="w-full p-2 rounded-xl border border-slate-200 dark:border-darkBorder bg-slate-50 dark:bg-slate-900 dark:text-white"></select>
+            <label class="block font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">الأسبوع:</label>
+            <select id="filter-week" class="w-full p-2.5 rounded-xl border border-zinc-200 dark:border-darkBorder bg-zinc-50 dark:bg-zinc-950 dark:text-zinc-200 outline-none focus:ring-2 focus:ring-emerald-500"></select>
           </div>
           <div>
-            <label class="block font-bold text-slate-500 dark:text-slate-400 mb-1">الحالة:</label>
-            <select id="filter-status" class="w-full p-2 rounded-xl border border-slate-200 dark:border-darkBorder bg-slate-50 dark:bg-slate-900 dark:text-white">
+            <label class="block font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">الحالة:</label>
+            <select id="filter-status" class="w-full p-2.5 rounded-xl border border-zinc-200 dark:border-darkBorder bg-zinc-50 dark:bg-zinc-950 dark:text-zinc-200 outline-none focus:ring-2 focus:ring-emerald-500">
               <option value="all">الكل</option>
               <option value="none">❌ ما قاريها</option>
               <option value="once">📖 مرة واحدة</option>
@@ -146,50 +154,75 @@
         </div>
       </div>
 
-      <!-- ================= 1. عرض محاضرات اليوم (Today View) ================= -->
+      <!-- ================= 1. عرض محاضرات اليوم ================= -->
       <div id="view-today" class="hidden space-y-4">
-        <div class="bg-gradient-to-r from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 p-5 rounded-2xl border border-amber-200 dark:border-amber-800 flex items-center justify-between shadow-sm">
-          <div class="flex items-center gap-3">
-            <span class="text-3xl drop-shadow-sm">⚡</span> 
+        <div class="bg-emerald-50 dark:bg-darkCard p-5 rounded-2xl border border-emerald-200 dark:border-darkBorder flex items-center justify-between shadow-sm">
+          <div class="flex items-center gap-4">
+            <span class="text-4xl drop-shadow-sm">⚡</span> 
             <div>
-              <h2 class="text-lg font-bold text-amber-900 dark:text-amber-300">محاضرات اليوم</h2>
-              <p id="today-date-text" class="text-xs font-semibold text-amber-700 dark:text-amber-500/80 mt-0.5"></p>
+              <h2 class="text-xl font-bold text-emerald-900 dark:text-emerald-400">محاضرات اليوم</h2>
+              <p id="today-date-text" class="text-sm font-semibold text-emerald-700 dark:text-zinc-400 mt-1"></p>
             </div>
           </div>
         </div>
-        <div id="today-container" class="space-y-3"></div>
+        <div id="today-container" class="space-y-4"></div>
       </div>
 
-      <!-- ================= 2. عرض القائمة (List View) ================= -->
+      <!-- ================= 2. عرض القائمة ================= -->
       <div id="view-list" class="space-y-4"></div>
 
-      <!-- ================= 3. عرض قائمة المهام (To-Do List) ================= -->
+      <!-- ================= 3. عرض المهام ================= -->
       <div id="view-todo" class="hidden space-y-4">
-        <div class="bg-indigo-50 dark:bg-indigo-900/30 p-4 rounded-2xl border border-indigo-100 dark:border-indigo-800 text-sm font-bold text-indigo-800 dark:text-indigo-300 flex items-center gap-2 shadow-sm">
-          <span>📌</span> هذه القائمة خاصة بك لجمع المحاضرات التي تحتاج مراجعتها أو دراستها قريباً.
+        <div class="bg-zinc-100 dark:bg-darkCard p-5 rounded-2xl border border-zinc-200 dark:border-darkBorder text-sm font-bold text-zinc-800 dark:text-zinc-300 flex items-center gap-3 shadow-sm">
+          <span class="text-2xl">📌</span> 
+          <p>هذه القائمة خاصة بك لجمع المحاضرات التي تحتاج مراجعتها أو دراستها قريباً.</p>
         </div>
-        <div id="todo-container" class="space-y-3"></div>
+        <div id="todo-container" class="space-y-4"></div>
       </div>
 
-      <!-- ================= 4. عرض التقويم (Calendar View) ================= -->
-      <div id="view-calendar" class="hidden">
-        <div class="bg-white dark:bg-darkCard rounded-2xl shadow-sm border border-slate-200 dark:border-darkBorder overflow-hidden">
-          <div class="p-4 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-darkBorder flex justify-between items-center">
-            <button onclick="changeMonth(-1)" class="p-2 rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-darkBorder text-slate-700 dark:text-slate-200">❮ السابق</button>
-            <div class="text-center">
-              <h2 id="cal-month-year" class="font-bold text-lg text-slate-800 dark:text-white"></h2>
-              <button onclick="goToCurrentMonth()" class="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline">العودة لليوم</button>
-            </div>
-            <button onclick="changeMonth(1)" class="p-2 rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-darkBorder text-slate-700 dark:text-slate-200">التالي ❯</button>
+      <!-- ================= 4. عرض الامتحانات ================= -->
+      <div id="view-exams" class="hidden space-y-5">
+        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl border border-zinc-200 dark:border-darkBorder shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+              📝 جدول الامتحانات
+            </h2>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">يتم حساب موعد الامتحان التلقائي بناءً على الكروب الخاص بك.</p>
           </div>
-          <div class="grid grid-cols-7 text-center text-[10px] md:text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-100/70 dark:bg-slate-900 py-2.5">
+          <div class="w-full md:w-auto flex items-center gap-3 bg-zinc-50 dark:bg-zinc-950 p-2 rounded-xl border border-zinc-200 dark:border-darkBorder">
+            <label class="text-sm font-bold text-zinc-700 dark:text-zinc-300 whitespace-nowrap pl-2">الكروب:</label>
+            <select id="user-group-select" onchange="updateGroupAndRender()" class="bg-white dark:bg-darkCard border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full p-2 outline-none cursor-pointer">
+              <optgroup label="Group A">
+                <option value="A1">A1</option><option value="A2">A2</option><option value="A3">A3</option><option value="A4">A4</option><option value="A5">A5</option>
+              </optgroup>
+              <optgroup label="Group B">
+                <option value="B1">B1</option><option value="B2">B2</option><option value="B3">B3</option><option value="B4">B4</option><option value="B5">B5</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+        <div id="exams-container" class="space-y-3"></div>
+      </div>
+
+      <!-- ================= 5. عرض التقويم ================= -->
+      <div id="view-calendar" class="hidden">
+        <div class="bg-white dark:bg-darkCard rounded-2xl shadow-sm border border-zinc-200 dark:border-darkBorder overflow-hidden">
+          <div class="p-4 bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-darkBorder flex justify-between items-center">
+            <button onclick="changeMonth(-1)" class="px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition">❮ السابق</button>
+            <div class="text-center">
+              <h2 id="cal-month-year" class="font-bold text-lg text-zinc-800 dark:text-zinc-100"></h2>
+              <button onclick="goToCurrentMonth()" class="text-xs text-emerald-600 dark:text-emerald-400 font-bold hover:underline mt-1">العودة لليوم</button>
+            </div>
+            <button onclick="changeMonth(1)" class="px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition">التالي ❯</button>
+          </div>
+          <div class="grid grid-cols-7 text-center text-[10px] md:text-xs font-bold text-zinc-500 dark:text-zinc-400 bg-zinc-100/50 dark:bg-zinc-950 py-3">
             <div>السبت</div><div>الأحد</div><div>الاثنين</div><div>الثلاثاء</div><div>الأربعاء</div><div>الخميس</div><div>الجمعة</div>
           </div>
-          <div id="cal-grid" class="grid grid-cols-7 auto-rows-fr bg-slate-200 dark:bg-slate-700 gap-px"></div>
+          <div id="cal-grid" class="grid grid-cols-7 auto-rows-fr bg-zinc-200 dark:bg-zinc-800 gap-px"></div>
         </div>
-        <div id="cal-day-details" class="mt-4 bg-white dark:bg-darkCard rounded-2xl p-4 border border-slate-200 dark:border-darkBorder shadow-sm">
-          <h3 id="cal-selected-day-title" class="font-bold text-slate-800 dark:text-white text-sm mb-3">اختر يوماً لعرض محاضراته</h3>
-          <div id="cal-selected-day-lectures" class="space-y-2"></div>
+        <div id="cal-day-details" class="mt-5 bg-white dark:bg-darkCard rounded-2xl p-5 border border-zinc-200 dark:border-darkBorder shadow-sm">
+          <h3 id="cal-selected-day-title" class="font-bold text-zinc-800 dark:text-zinc-100 text-sm mb-4">اختر يوماً لعرض محاضراته</h3>
+          <div id="cal-selected-day-lectures" class="space-y-3"></div>
         </div>
       </div>
 
@@ -198,17 +231,25 @@
 
   <!-- ================= Logic (JavaScript) ================= -->
   <script>
-    // 🔴 الصق رابط الـ Cloudflare Worker هنا
     const API_URL = "https://lectures-api.memoe3227.workers.dev/";
 
     let lecturesData = [];
-    let currentView = 'list'; // التبويب الافتراضي
+    let examsData = []; 
+    let currentView = 'list';
     let currentCalDate = new Date();
     let selectedDateStr = null;
 
     const ARABIC_MONTHS = ["كانون 2", "شباط", "آذار", "نيسان", "أيار", "حزيران", "تموز", "آب", "أيلول", "تشرين 1", "تشرين 2", "كانون 1"];
 
-    // ================= دوال الحفظ المحلي (Local Storage) =================
+    // خريطة إزاحة الأيام لكل مادة حسب الكروب
+    const scheduleOffsets = {
+      "1": { "Internal Medicine": 0, "باطنية": 0, "Forensic": 1, "عدلي": 1, "Community": 2, "مجتمع": 2, "Obstetrics": 3, "توليد": 3, "Surgery": 4, "جراحة": 4 },
+      "2": { "Surgery": 0, "جراحة": 0, "Internal Medicine": 1, "باطنية": 1, "Forensic": 2, "عدلي": 2, "Community": 3, "مجتمع": 3, "Obstetrics": 4, "توليد": 4 },
+      "3": { "Obstetrics": 0, "توليد": 0, "Surgery": 1, "جراحة": 1, "Internal Medicine": 2, "باطنية": 2, "Forensic": 3, "عدلي": 3, "Community": 4, "مجتمع": 4 },
+      "4": { "Community": 0, "مجتمع": 0, "Obstetrics": 1, "توليد": 1, "Surgery": 2, "جراحة": 2, "Internal Medicine": 3, "باطنية": 3, "Forensic": 4, "عدلي": 4 },
+      "5": { "Forensic": 0, "عدلي": 0, "Community": 1, "مجتمع": 1, "Obstetrics": 2, "توليد": 2, "Surgery": 3, "جراحة": 3, "Internal Medicine": 4, "باطنية": 4 }
+    };
+
     const Storage = {
       get: (key, id, def) => localStorage.getItem(`${key}_${id}`) || def,
       set: (key, id, val) => localStorage.setItem(`${key}_${id}`, val),
@@ -219,7 +260,6 @@
       }
     };
 
-    // الدارك مود
     function toggleDarkMode() {
       const html = document.documentElement;
       const isDark = html.classList.toggle('dark');
@@ -229,10 +269,11 @@
     
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById('theme-icon').innerText = document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
-      
-      // وضع تاريخ اليوم في تبويب اليوم
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
       document.getElementById('today-date-text').innerText = new Date().toLocaleDateString('ar-IQ', options);
+      
+      const savedGroup = localStorage.getItem('user_exam_group') || 'A1';
+      document.getElementById('user-group-select').value = savedGroup;
     });
 
     function getTodayStr() {
@@ -243,14 +284,21 @@
       return `${y}-${m}-${d}`;
     }
 
-    // ================= جلب البيانات والتهيئة =================
-    async function loadLectures() {
+ async function loadLectures() {
       try {
-        const res = await fetch(API_URL);
+        // ضفنا (?nocache=...) و (cache: "no-store") حتى نجبر المتصفح يسحب تحديثات الامتحانات فوراً
+        const res = await fetch(API_URL + "?nocache=" + new Date().getTime(), { cache: "no-store" });
         const data = await res.json();
-        if (!Array.isArray(data)) throw new Error();
-        lecturesData = data;
         
+        // استلام البيانات بصيغتها النهائية من الـ Worker 
+        if (data && data.lectures) {
+            lecturesData = data.lectures;
+            examsData = data.exams || [];
+        } else if (Array.isArray(data)) {
+            // كود احتياطي
+            lecturesData = data;
+        }
+
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('app-content').classList.remove('hidden');
 
@@ -284,7 +332,6 @@
       });
     }
 
-    // ================= التفاعل مع بطاقة المحاضرة =================
     function changeStatus(id, val) { Storage.set('status', id, val); renderAllViews(); }
     function toggleMCQ(id) { Storage.toggle('mcq', id); renderAllViews(); }
     function toggleToDo(id) { Storage.toggle('todo', id); renderAllViews(); }
@@ -293,57 +340,65 @@
       if (currentView === 'today') renderTodayView();
       if (currentView === 'list') renderListView();
       if (currentView === 'todo') renderToDoView();
+      if (currentView === 'exams') renderExamsView();
       if (currentView === 'calendar') { renderCalendar(); if (selectedDateStr) renderDayDetails(selectedDateStr); }
       updateStats();
     }
 
-    // ================= إنشاء HTML بطاقة المحاضرة =================
     function generateCardHTML(item) {
       const st = Storage.get('status', item.id, 'none');
       const isMCQ = Storage.get('mcq', item.id, 'false') === 'true';
       const isToDo = Storage.get('todo', item.id, 'false') === 'true';
 
-      let bg = "bg-white dark:bg-darkCard border-slate-200 dark:border-darkBorder";
-      let selectStyle = "bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300";
+      let bg = "bg-white dark:bg-darkCard border-zinc-200 dark:border-darkBorder";
+      let selectStyle = "bg-zinc-50 dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700";
       
-      if (st === 'once') { bg = "bg-amber-50/30 dark:bg-amber-900/10 border-amber-300 dark:border-amber-700"; selectStyle = "bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200 border-amber-300 dark:border-amber-700"; }
-      if (st === 'twice') { bg = "bg-emerald-50/30 dark:bg-emerald-900/10 border-emerald-300 dark:border-emerald-700"; selectStyle = "bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 border-emerald-300 dark:border-emerald-700"; }
-      if (st === 'thrice') { bg = "bg-cyan-50/40 dark:bg-cyan-900/20 border-cyan-400 dark:border-cyan-600 shadow-cyan-100 dark:shadow-none"; selectStyle = "bg-cyan-100 dark:bg-cyan-900 text-cyan-800 dark:text-cyan-200 border-cyan-400 dark:border-cyan-600 font-bold"; }
+      if (st === 'once') { 
+        bg = "bg-emerald-50/50 dark:bg-zinc-900 border-emerald-200 dark:border-emerald-900/50"; 
+        selectStyle = "bg-emerald-50 dark:bg-zinc-800 text-emerald-800 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50"; 
+      }
+      if (st === 'twice') { 
+        bg = "bg-emerald-100/50 dark:bg-zinc-800 border-emerald-300 dark:border-emerald-800"; 
+        selectStyle = "bg-emerald-100 dark:bg-zinc-800 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 font-medium"; 
+      }
+      if (st === 'thrice') { 
+        bg = "bg-emerald-100 dark:bg-zinc-800 border-emerald-400 dark:border-emerald-500/80 shadow-sm shadow-emerald-100 dark:shadow-none"; 
+        selectStyle = "bg-emerald-200 dark:bg-emerald-950 text-emerald-900 dark:text-emerald-200 border-emerald-400 dark:border-emerald-500 font-bold"; 
+      }
 
       return `
-        <div class="p-4 rounded-2xl border ${bg} shadow-sm transition-colors animate-pop">
-          <div class="flex justify-between items-start mb-2">
-            <div class="flex flex-wrap gap-1.5">
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300">${item.department}</span>
-              ${item.week ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">W${item.week}</span>` : ''}
-              <span class="text-[10px] font-medium px-2 py-0.5 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-600 rounded-md">📅 ${item.date || 'لا يوجد'}</span>
+        <div class="p-5 rounded-2xl border ${bg} transition-colors animate-pop">
+          <div class="flex justify-between items-start mb-3">
+            <div class="flex flex-wrap gap-2">
+              <span class="text-[10px] font-bold px-2 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700">${item.department}</span>
+              ${item.week ? `<span class="text-[10px] font-bold px-2 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700">W${item.week}</span>` : ''}
+              <span class="text-[10px] font-medium px-2 py-1 text-zinc-500 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700 rounded-md">📅 ${item.date || 'لا يوجد'}</span>
             </div>
-            <button onclick="toggleToDo('${item.id}')" class="text-lg transition hover:scale-110" title="إضافة/إزالة من المهام">
+            <button onclick="toggleToDo('${item.id}')" class="text-xl transition hover:scale-110" title="إضافة/إزالة من المهام">
               ${isToDo ? '📌' : '<span class="opacity-30 grayscale filter">📌</span>'}
             </button>
           </div>
           
-          <h3 class="font-bold text-base text-slate-900 dark:text-white mb-0.5">${item.title}</h3>
-          <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4 font-medium">👨‍⚕️ د. ${item.doctor}</p>
+          <h3 class="font-bold text-lg text-zinc-900 dark:text-zinc-100 mb-1 leading-snug">${item.title}</h3>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-5 font-medium">👨‍⚕️ ${item.doctor}</p>
 
-          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-darkBorder">
-            <select onchange="changeStatus('${item.id}', this.value)" class="w-full sm:w-auto px-3 py-2 rounded-xl text-xs font-bold focus:outline-none cursor-pointer border ${selectStyle}">
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t border-zinc-100 dark:border-zinc-700/50">
+            <select onchange="changeStatus('${item.id}', this.value)" class="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs focus:outline-none cursor-pointer border ${selectStyle}">
               <option value="none" ${st === 'none' ? 'selected' : ''}>❌ ما قاريها</option>
               <option value="once" ${st === 'once' ? 'selected' : ''}>📖 قاريها مرة</option>
               <option value="twice" ${st === 'twice' ? 'selected' : ''}>⭐ قاريها مرتين</option>
               <option value="thrice" ${st === 'thrice' ? 'selected' : ''}>🔥 قاريها 3 مرات</option>
             </select>
 
-            <label class="flex items-center gap-2 cursor-pointer bg-slate-50 dark:bg-slate-800/50 px-3 py-2 rounded-xl border border-slate-200 dark:border-darkBorder hover:bg-slate-100 dark:hover:bg-slate-800 transition select-none">
-              <input type="checkbox" onchange="toggleMCQ('${item.id}')" ${isMCQ ? 'checked' : ''} class="w-4 h-4 text-rose-500 rounded focus:ring-rose-500 dark:bg-slate-700 dark:border-slate-600 accent-rose-500 cursor-pointer">
-              <span class="text-xs font-bold ${isMCQ ? 'text-rose-600 dark:text-rose-400' : 'text-slate-600 dark:text-slate-400'}">حل MCQs 📝</span>
+            <label class="flex items-center gap-2 cursor-pointer bg-zinc-50 dark:bg-zinc-950 px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition select-none">
+              <input type="checkbox" onchange="toggleMCQ('${item.id}')" ${isMCQ ? 'checked' : ''} class="w-4 h-4 text-emerald-500 rounded focus:ring-emerald-500 dark:bg-zinc-800 dark:border-zinc-600 accent-emerald-500 cursor-pointer">
+              <span class="text-xs font-bold ${isMCQ ? 'text-emerald-600 dark:text-emerald-400' : 'text-zinc-600 dark:text-zinc-400'}">حل MCQs 📝</span>
             </label>
           </div>
         </div>
       `;
     }
 
-    // ================= محاضرات اليوم (Today View) =================
     function renderTodayView() {
       const container = document.getElementById('today-container');
       const todayStr = getTodayStr();
@@ -352,16 +407,15 @@
       container.innerHTML = "";
       if (todayLectures.length === 0) {
         container.innerHTML = `
-          <div class="text-center py-10 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl bg-white dark:bg-darkCard">
-            <span class="text-4xl">🎉</span>
-            <p class="mt-3 text-sm text-slate-500 dark:text-slate-400 font-bold">عطلة سعيدة!<br>لا توجد محاضرات مسجلة بتاريخ اليوم.</p>
+          <div class="text-center py-12 border-2 border-dashed border-zinc-200 dark:border-darkBorder rounded-2xl bg-white dark:bg-darkCard">
+            <span class="text-5xl">🎉</span>
+            <p class="mt-4 text-sm text-zinc-500 dark:text-zinc-400 font-bold">عطلة سعيدة!<br>لا توجد محاضرات مسجلة بتاريخ اليوم.</p>
           </div>`;
         return;
       }
       todayLectures.forEach(item => container.innerHTML += generateCardHTML(item));
     }
 
-    // ================= فلاتر وتجميع القائمة =================
     function getFilteredLectures() {
       const q = document.getElementById('search-input').value.toLowerCase();
       const dep = document.getElementById('filter-dept').value;
@@ -386,7 +440,7 @@
       
       container.innerHTML = "";
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="text-center py-10 text-slate-500 dark:text-slate-400 font-bold">لا توجد نتائج تطابق البحث.</div>`;
+        container.innerHTML = `<div class="text-center py-12 bg-white dark:bg-darkCard border border-zinc-200 dark:border-darkBorder rounded-2xl text-zinc-500 dark:text-zinc-400 font-bold">لا توجد نتائج تطابق البحث.</div>`;
         return;
       }
 
@@ -402,13 +456,13 @@
         });
 
         Object.keys(groups).sort().forEach(groupName => {
-          let groupTitle = groupBy === 'doctor' ? `👨‍⚕️ د. ${groupName}` : groupBy === 'week' ? `📅 الأسبوع ${groupName}` : `📚 ${groupName}`;
+          let groupTitle = groupBy === 'doctor' ? `👨‍⚕️ ${groupName}` : groupBy === 'week' ? `📅 الأسبوع ${groupName}` : `📚 ${groupName}`;
           let html = `
-            <div class="mb-6">
-              <h2 class="text-sm font-bold text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-2">
-                <span class="h-px bg-slate-200 dark:bg-slate-700 flex-1"></span>
-                ${groupTitle} <span class="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-full text-[10px]">${groups[groupName].length}</span>
-                <span class="h-px bg-slate-200 dark:bg-slate-700 flex-1"></span>
+            <div class="mb-8">
+              <h2 class="text-sm font-bold text-zinc-400 dark:text-zinc-500 mb-4 flex items-center gap-3">
+                <span class="h-px bg-zinc-200 dark:bg-zinc-800 flex-1"></span>
+                ${groupTitle} <span class="bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-2.5 py-1 rounded-full text-[10px]">${groups[groupName].length}</span>
+                <span class="h-px bg-zinc-200 dark:bg-zinc-800 flex-1"></span>
               </h2>
               <div class="space-y-4">
           `;
@@ -419,7 +473,6 @@
       }
     }
 
-    // ================= قائمة المهام (To-Do) =================
     function renderToDoView() {
       const container = document.getElementById('todo-container');
       const todos = lecturesData.filter(i => Storage.get('todo', i.id, 'false') === 'true');
@@ -427,16 +480,109 @@
       container.innerHTML = "";
       if (todos.length === 0) {
         container.innerHTML = `
-          <div class="text-center py-10 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl">
-            <span class="text-3xl opacity-50 grayscale">📌</span>
-            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400 font-bold">قائمة المهام فارغة.<br>اضغط على أيقونة الدبوس في أي محاضرة لإضافتها هنا.</p>
+          <div class="text-center py-12 border-2 border-dashed border-zinc-200 dark:border-darkBorder rounded-2xl bg-white dark:bg-darkCard">
+            <span class="text-4xl opacity-50 grayscale">📌</span>
+            <p class="mt-4 text-sm text-zinc-500 dark:text-zinc-400 font-bold">قائمة المهام فارغة.<br>اضغط على أيقونة الدبوس في أي محاضرة لإضافتها هنا.</p>
           </div>`;
         return;
       }
       todos.forEach(item => container.innerHTML += generateCardHTML(item));
     }
 
-    // ================= التقويم (Calendar) =================
+    function calculateExactExamDate(baseDateStr, department, groupName) {
+      if (!baseDateStr) return new Date().toISOString().split('T')[0];
+      
+      const groupNum = groupName.replace(/\D/g, ''); 
+      let offset = 0;
+      if (scheduleOffsets[groupNum] && scheduleOffsets[groupNum][department]) {
+        offset = scheduleOffsets[groupNum][department];
+      }
+
+      const exactDate = new Date(baseDateStr);
+      exactDate.setDate(exactDate.getDate() + offset);
+      
+      const y = exactDate.getFullYear();
+      const m = String(exactDate.getMonth() + 1).padStart(2, '0');
+      const d = String(exactDate.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function updateGroupAndRender() {
+      const selectedGroup = document.getElementById('user-group-select').value;
+      localStorage.setItem('user_exam_group', selectedGroup);
+      renderExamsView();
+    }
+
+    function renderExamsView() {
+      const container = document.getElementById('exams-container');
+      const userGroup = localStorage.getItem('user_exam_group') || 'A1';
+      
+      const myExams = examsData.map(exam => {
+        const exactDateStr = calculateExactExamDate(exam.date, exam.department, userGroup);
+        return { ...exam, exactDateStr: exactDateStr };
+      });
+      
+      myExams.sort((a, b) => new Date(a.exactDateStr) - new Date(b.exactDateStr));
+
+      container.innerHTML = "";
+      if (myExams.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 border-2 border-dashed border-zinc-200 dark:border-darkBorder rounded-2xl bg-white dark:bg-darkCard">
+            <span class="text-4xl">😌</span>
+            <p class="mt-4 text-sm text-zinc-500 dark:text-zinc-400 font-bold">لا توجد امتحانات قادمة لكروب ${userGroup}.</p>
+          </div>`;
+        return;
+      }
+
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      myExams.forEach(exam => {
+        const examDate = new Date(exam.exactDateStr);
+        examDate.setHours(0,0,0,0);
+        
+        const diffTime = examDate - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        let daysText = "";
+        let colorClass = "bg-white dark:bg-darkCard border-zinc-200 dark:border-darkBorder";
+        let badgeClass = "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300";
+
+        if (diffDays < 0) {
+          daysText = "انتهى";
+          colorClass = "bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 opacity-60";
+        } else if (diffDays === 0) {
+          daysText = "اليوم!";
+          colorClass = "bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-900/50";
+          badgeClass = "bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-400";
+        } else if (diffDays <= 3) {
+          daysText = `بعد ${diffDays} أيام`;
+          colorClass = "bg-orange-50 dark:bg-orange-900/10 border-orange-200 dark:border-orange-900/50";
+          badgeClass = "bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-400";
+        } else {
+          daysText = `بعد ${diffDays} يوم`;
+        }
+
+        const displayOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const displayDate = examDate.toLocaleDateString('ar-IQ', displayOptions);
+
+        container.innerHTML += `
+          <div class="p-5 rounded-2xl border ${colorClass} flex items-center justify-between shadow-sm transition-all animate-pop">
+            <div>
+              <h3 class="font-bold text-lg text-zinc-900 dark:text-zinc-100 mb-1">${exam.title}</h3>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 font-medium flex items-center gap-1">
+                <span>📅 ${displayDate}</span>
+                ${exam.week ? `<span class="px-1.5 py-0.5 bg-zinc-200/50 dark:bg-zinc-800 rounded text-[10px] ml-1">W${exam.week}</span>` : ''}
+              </p>
+            </div>
+            <div class="px-4 py-2 rounded-xl text-sm font-bold ${badgeClass}">
+              ${daysText}
+            </div>
+          </div>
+        `;
+      });
+    }
+
     function renderCalendar() {
       const year = currentCalDate.getFullYear();
       const month = currentCalDate.getMonth();
@@ -457,7 +603,7 @@
         lecturesByDate[d].push(item);
       });
 
-      for (let i = 0; i < startDayIndex; i++) grid.innerHTML += `<div class="bg-slate-50/50 dark:bg-slate-800/30 min-h-[70px]"></div>`;
+      for (let i = 0; i < startDayIndex; i++) grid.innerHTML += `<div class="bg-zinc-50 dark:bg-zinc-900 min-h-[70px]"></div>`;
 
       const todayStr = getTodayStr();
 
@@ -467,16 +613,16 @@
         const isToday = (dateKey === todayStr);
         const isSel = (dateKey === selectedDateStr);
 
-        let classes = "bg-white dark:bg-darkCard min-h-[70px] p-1.5 cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition flex flex-col justify-between";
-        if (isSel) classes += " ring-2 ring-indigo-500 z-10";
+        let classes = "bg-white dark:bg-darkCard min-h-[70px] p-2 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800 transition flex flex-col justify-between";
+        if (isSel) classes += " ring-2 ring-emerald-500 z-10";
 
         let dots = "";
-        dayLecs.slice(0, 3).forEach(lec => {
+        dayLecs.slice(0, 4).forEach(lec => {
           const st = Storage.get('status', lec.id, 'none');
-          let c = "bg-slate-400";
-          if (st === 'once') c = "bg-amber-400";
-          if (st === 'twice') c = "bg-emerald-400";
-          if (st === 'thrice') c = "bg-cyan-400";
+          let c = "bg-zinc-300 dark:bg-zinc-600";
+          if (st === 'once') c = "bg-emerald-300 dark:bg-emerald-700";
+          if (st === 'twice') c = "bg-emerald-400 dark:bg-emerald-500";
+          if (st === 'thrice') c = "bg-emerald-500 dark:bg-emerald-400";
           dots += `<div class="w-1.5 h-1.5 rounded-full ${c}"></div>`;
         });
 
@@ -485,9 +631,9 @@
         cell.onclick = () => { selectedDateStr = dateKey; renderCalendar(); renderDayDetails(dateKey); };
         cell.innerHTML = `
           <div class="flex justify-between items-start">
-            <span class="text-xs font-bold ${isToday ? 'w-5 h-5 bg-indigo-600 text-white rounded-full flex items-center justify-center' : 'text-slate-700 dark:text-slate-300'}">${day}</span>
+            <span class="text-xs font-bold ${isToday ? 'w-6 h-6 bg-emerald-600 text-white rounded-full flex items-center justify-center' : 'text-zinc-700 dark:text-zinc-300'}">${day}</span>
           </div>
-          <div class="flex gap-0.5 mt-1 flex-wrap">${dots}</div>
+          <div class="flex gap-1 mt-1 flex-wrap">${dots}</div>
         `;
         grid.appendChild(cell);
       }
@@ -501,7 +647,7 @@
       container.innerHTML = "";
       
       if (filtered.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-500 dark:text-slate-400">لا توجد محاضرات في هذا اليوم.</p>`;
+        container.innerHTML = `<p class="text-sm text-zinc-500 dark:text-zinc-400 text-center py-4">لا توجد محاضرات في هذا اليوم.</p>`;
         return;
       }
       filtered.forEach(item => container.innerHTML += generateCardHTML(item));
@@ -510,7 +656,6 @@
     function changeMonth(d) { currentCalDate.setMonth(currentCalDate.getMonth() + d); renderCalendar(); }
     function goToCurrentMonth() { currentCalDate = new Date(); selectedDateStr = getTodayStr(); renderCalendar(); renderDayDetails(selectedDateStr); }
 
-    // ================= تحديث الإحصائيات =================
     function updateStats() {
       let total = lecturesData.length, none = 0, once = 0, twice = 0, thrice = 0, mcq = 0, todo = 0;
       
@@ -540,29 +685,28 @@
       document.getElementById('progress-text').innerText = `نسبة الإنجاز: ${pct}%`;
     }
 
-    // ================= التنقل بين التبويبات =================
     function switchView(v) {
       currentView = v;
-      const actClass = "flex-1 px-3 py-2 rounded-lg transition bg-white dark:bg-slate-700 text-indigo-900 dark:text-white shadow font-bold";
-      const defClass = "flex-1 px-3 py-2 rounded-lg transition text-indigo-200 dark:text-slate-400 hover:text-white dark:hover:text-white font-medium";
+      const actClass = "flex-1 px-3 py-2.5 rounded-lg transition bg-white dark:bg-zinc-800 text-emerald-900 dark:text-emerald-400 shadow font-bold";
+      const defClass = "flex-1 px-3 py-2.5 rounded-lg transition text-zinc-200 hover:text-white font-medium";
       
       document.getElementById('tab-today-btn').className = v === 'today' ? actClass : defClass;
       document.getElementById('tab-list-btn').className = v === 'list' ? actClass : defClass;
       document.getElementById('tab-todo-btn').className = v === 'todo' ? actClass : defClass;
+      document.getElementById('tab-exams-btn').className = v === 'exams' ? actClass : defClass;
       document.getElementById('tab-cal-btn').className = v === 'calendar' ? actClass : defClass;
       
       document.getElementById('view-today').classList.toggle('hidden', v !== 'today');
       document.getElementById('view-list').classList.toggle('hidden', v !== 'list');
       document.getElementById('view-todo').classList.toggle('hidden', v !== 'todo');
+      document.getElementById('view-exams').classList.toggle('hidden', v !== 'exams');
       document.getElementById('view-calendar').classList.toggle('hidden', v !== 'calendar');
       
-      // إخفاء الفلاتر في تبويبات (اليوم) و (المهام) لأنها لا تحتاجها
-      document.getElementById('filters-container').classList.toggle('hidden', v === 'todo' || v === 'today');
+      document.getElementById('filters-container').classList.toggle('hidden', v === 'todo' || v === 'today' || v === 'exams');
 
       renderAllViews();
     }
 
-    // تشغيل
     loadLectures();
   </script>
 </body>
